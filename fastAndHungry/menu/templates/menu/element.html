@@ -1,0 +1,19 @@
+<!-- Top Songs -->
+{% extends 'restaurante/base.html' %}
+
+{% load static %}
+
+{% block title %}elemento{% endblock title %}
+
+{% block head %} 
+<meta name="description" content="Un elemento del menu">
+{% endblock head %}
+
+
+{% block body_content %}
+    <div>
+        <h2>{{element.name}}</h2>
+    </div>
+
+    
+{% endblock body_content %}
