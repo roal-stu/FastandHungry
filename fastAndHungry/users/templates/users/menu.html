@@ -1,0 +1,20 @@
+<!-- Top Songs -->
+
+
+{% load static %}
+
+{% block title %}{% endblock title %}
+
+{% block body_content %}
+    <h1>Nuestro Menu:</h1>
+
+    <ul>
+        {% for platillo in platillos %}
+        <li>{{platillo}}</li>
+        <img src= "{{platillo.image.url}}" width="250" height="250">
+
+        {% endfor %}
+        
+    </ul>
+    
+{% endblock body_content %}
