@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,  get_object_or_404
 from django.views import View
 
 # Models
@@ -8,17 +8,12 @@ from .models import Element,Category
 
 class ElementView(View):
     """Top songs.
-    TODO: Show songs by its popularity.
+    TODO: Show a eleement of the menu
     """
-
     template = "menu/element.html"
 
-    def get(self, request):
+    def get(self, request, id):
         """GET method."""
-
-        element_id = request.GET.get()
-        element = Element.objects.filter(id = element_id)
-
+        element = get_object_or_404(Element, id=id)
         context = {"element":element}
-
         return render(request, self.template, context)

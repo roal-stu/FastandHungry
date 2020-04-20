@@ -3,7 +3,7 @@
 
 {% load static %}
 
-{% block title %}elemento{% endblock title %}
+{% block title %}Platillo - {{element.name}}{% endblock title %}
 
 {% block head %} 
 <meta name="description" content="Un elemento del menu">
@@ -13,6 +13,8 @@
 {% block body_content %}
     <div>
         <h2>{{element.name}}</h2>
+        <p>{{element.description}}</p>
+        <p>{{element.price}}</p>
     </div>
 
     

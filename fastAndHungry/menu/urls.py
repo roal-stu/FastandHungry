@@ -10,5 +10,5 @@ app_name = "menu"
 
 urlpatterns = [
     # Class-based views
-    path('platillo/', views.ElementView.as_view(), name='element'),
+    path('platillo/<int:id>', views.ElementView.as_view(), name='element'),
 ]
