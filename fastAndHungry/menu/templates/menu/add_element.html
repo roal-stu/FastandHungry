@@ -1,0 +1,23 @@
+{% extends 'restaurante/base.html' %}
+
+{% block title %}Agregar Platillo{% endblock title %}
+
+{% block head %} 
+<meta name="description" content="Agregar un elemento al menu">
+{% endblock head %}
+
+{% block body_content %}
+<h1>Agregar Platillo</h1>
+
+<form action="." method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="create_artist_input">
+        {{ field.errors }}
+        {{ field.label_tag }}
+        {{ field }}
+    </div>
+    {% endfor %}
+    <input value="Create" type="submit">
+</form>
+{% endblock body_content %}
