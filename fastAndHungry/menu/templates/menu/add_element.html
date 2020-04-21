@@ -7,7 +7,7 @@
 {% endblock head %}
 
 {% block body_content %}
-<h1>Agregar Platillo</h1>
+<h1>{{ title }}</h1>
 
 <form action="." method="POST" enctype="multipart/form-data">
     {% csrf_token %}
