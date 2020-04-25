@@ -61,3 +61,7 @@ class EditElementView(View):
         element.img = form.cleaned_data.get("image") 
         element.save() 
         return redirect("/")
+
+class ElementDelete(DeleteView):
+    model = Element
+    success_url = '/'
