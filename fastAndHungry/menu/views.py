@@ -31,13 +31,16 @@ class ElementCreate(CreateView):
     fields = '__all__'
 
 
-class EditElementView(View):
-    """Create new artist
+class ElementUpdate(UpdateView):
+    """Update Element.
+    TODO: Make changes in an Element
     """
-    template = "menu/add_element.html"
+    model = Element
+    fields = '__all__'
+    """template = "menu/add_element.html"
 
     def get(self, request, id):
-        """GET method."""
+        GET method.
         title = 'Editar platillo'
         element = get_object_or_404(Element, id=id)
         form = ElementForm(initial={'name': element.name, 'price': element.price, 
@@ -46,7 +49,7 @@ class EditElementView(View):
         return render(request, self.template, context)
     
     def post(self, request, id):
-        """Receive and validate sign up form."""
+        Receive and validate sign up form.
         element = get_object_or_404(Element, id=id)
         form = ElementForm(request.POST, request.FILES)
         context = {}
@@ -60,4 +63,4 @@ class EditElementView(View):
         element.description = form.cleaned_data.get("description")
         element.img = form.cleaned_data.get("image") 
         element.save() 
-        return redirect("/")
+        return redirect("/")"""
