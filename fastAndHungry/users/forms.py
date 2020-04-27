@@ -43,4 +43,4 @@ class CreateUserForm(UserCreationForm):
 class CreateDirecForm(ModelForm):
     class Meta:
         model = Customer
-        fields ='__all__'
+        exclude = ["users"]

@@ -27,28 +27,26 @@ def registerPage(request):
 			if form.is_valid():
 				form.save()
 				user = form.cleaned_data.get('username')
-				messages.success(request, 'Account was created for ' + user)
+				messages.success(request, 'Cuenta creada con exito con el usuario: ' + user)
 
-				return redirect('users:direc')
+				return redirect('users:login')
 			
 
 		context = {'form':form}
 		return render(request, 'users/register.html', context)
 		
 def direc(request):
-
-	if request.user.is_authenticated:
-		return redirect('home')
-	else:
-		form = CreateDirecForm()
+		dire = CreateDirecForm()
 		if request.method == 'POST':
-			form = CreateDirecForm(request.POST)
-			if form.is_valid():
-				form.save()
-				return redirect('users:login')
+			dire = CreateDirecForm(request.POST,)
+			if dire.is_valid():
+				dire = dire.save(commit=False)
+				dire.users = request.user
+				dire.save()
+				return redirect('users:home')
 			
 
-		context = {'form':form}
+		context = {'form':dire}
 		return render(request, 'users/regis2.html', context)
 
 
