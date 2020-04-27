@@ -4,8 +4,10 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 # Views
-from music import views
+from restaurante import views
 
 urlpatterns = [
+path('', views.Index.as_view(), name='index'),
+
 ] 
 

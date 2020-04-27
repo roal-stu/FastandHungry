@@ -22,14 +22,17 @@ from django.conf.urls.static import static
 
 
 from users import views
+from menu import views
 from restaurante import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('menu.urls')),
     path("", include("users.urls")),
-    path('menu/', views.Menu.as_view(), name='menu'),
+    path("", include("restaurante.urls")),
 
+   
 
 ]
 if settings.DEBUG:
