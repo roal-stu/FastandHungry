@@ -6,9 +6,6 @@ from django.views import View
 # Models
 from .models import Element,Category
 
-#Forms
-from .forms import ElementForm
-
 # Create your views here.
 
 class ElementMixin(object):
@@ -42,7 +39,6 @@ class ElementCreate(ElementMixin,CreateView):
     fields = '__all__'
     title = 'Crear Platillo'
 
-
 class ElementUpdate(ElementMixin,UpdateView):
     """Update Element.
     TODO: Make changes in an Element
@@ -50,3 +46,8 @@ class ElementUpdate(ElementMixin,UpdateView):
     model = Element
     fields = '__all__'
     title = 'Editar Platillo'
+
+class ElementDelete(DeleteView):
+    model = Element
+    success_url = '/'
+
