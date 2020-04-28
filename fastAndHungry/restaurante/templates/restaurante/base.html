@@ -8,18 +8,25 @@
     {% load static %}
     {% block head %}
     {% endblock head %}
-    <!--link rel="stylesheet" type="text/css" href={% static 'music/css/base.css' %}>
-    <link rel="stylesheet" type="text/css" href={% static 'music/css/player.css' %}>
-    <link rel="stylesheet" type="text/css" href={% static 'music/css/nav_bar.css' %}-->
+
+    <link rel="stylesheet" type="text/css" href={% static 'restaurante/css/base.css' %}>
+    <link rel="stylesheet" type="text/css" href={% static 'restaurante/css/nav_bar.css' %}>
+
+    {% block css %}
+    {% endblock css %}
     
 </head>
-<body>
-    <!--div class="header">
-        <h1>mSound Header</h1>
-    </!--div-->
 
-{% block body_content %}
-{% endblock body_content %}
+<body>
+    <div class="header">
+        <h1>FastAndHungry Header</h1>
+    </div>
+
+
+    {% include 'restaurante/nav_bar.html' %}
+
+    {% block body_content %}
+    {% endblock body_content %}
 
 </body>
 </html>
