@@ -1,0 +1,14 @@
+{% extends 'restaurante/base.html' %}
+
+{% block body_content %}
+
+<h1>Delete Element</h1>
+
+<p>Are you sure you want to delete the Element: {{ element }}?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" action="" value="Yes, delete." />
+</form>
+
+{% endblock %}

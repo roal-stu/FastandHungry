@@ -1,0 +1,20 @@
+{% extends 'restaurante/base.html' %}
+
+{% load static %}
+
+{% block title %}Platillo - {{element.name}}{% endblock title %}
+
+{% block head %} 
+<meta name="description" content="Un elemento del menu">
+{% endblock head %}
+
+
+{% block body_content %}
+    <div>
+        <h2>{{element.name}}</h2>
+        <p>{{element.description}}</p>
+        <p>{{element.price}}</p>
+    </div>
+
+    
+{% endblock body_content %}
