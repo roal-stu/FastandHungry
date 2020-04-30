@@ -1,14 +1,14 @@
 {% extends 'restaurante/base.html' %}
 
-{% block title %}Agregar Platillo{% endblock title %}
+{% block title %}{{ title }}{% endblock title %}
 
 {% block head %} 
-<meta name="description" content="Agregar un elemento al menu">
+<meta name="description" content= {{ title }}>
 {% endblock head %}
 
 {% block body_content %}
-<h1>{{ title }}</h1>
 
+<h1>{{ title }}</h1>
 <form action="." method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% for field in form %}
@@ -20,4 +20,5 @@
     {% endfor %}
     <input value="Create" type="submit">
 </form>
+<a  class="hello-msg" href="{% url 'users:homeAdmin' %}">Regresar al Menu</a></span>
 {% endblock body_content %}

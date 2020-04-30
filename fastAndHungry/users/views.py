@@ -9,8 +9,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from django.contrib import messages
-
+from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
+from .decorators import*
+
 
 # Create your views here.
 from .models import *
@@ -25,9 +27,11 @@ def registerPage(request):
 		if request.method == 'POST':
 			form = CreateUserForm(request.POST)
 			if form.is_valid():
-				form.save()
-				user = form.cleaned_data.get('username')
-				messages.success(request, 'Cuenta creada con exito con el usuario: ' + user)
+				user = form.save()
+				username = form.cleaned_data.get('username')
+				group = Group.objects.get(name='customer')
+				user.groups.add(group)
+				messages.success(request, 'Cuenta creada con exito con el usuario: ' + username)
 
 				return redirect('users:login')
 			
@@ -62,8 +66,18 @@ def logPage(request):
 			user = authenticate(request, username = username, password = password)
 
 			if user is not None:
+
 				login(request, user)
-				return redirect('users:home')
+				group = None
+				if request.user.groups.exists():
+					group = request.user.groups.all()[0].name
+
+				if group == 'customer':
+					return redirect('users:home')
+
+				if group == 'admin':
+					return redirect('users:homeAdmin')
+				
 			else:
 				messages.info(request, 'Usuario o contraseña incorrectos')
 		context = {}
@@ -73,6 +87,13 @@ def logPage(request):
 @login_required(login_url='users:login')
 def home(request):
 	return render(request, 'users/home.html',{} )
+
+
+@login_required(login_url='users:login')
+@admin_only
+def homeAdmin(request):
+	return render(request, 'users/menu.html',{} )
+
 
 def logoutUser(request):
 	logout(request)

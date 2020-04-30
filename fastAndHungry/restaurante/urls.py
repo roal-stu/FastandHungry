@@ -7,7 +7,7 @@ from django.conf import settings
 from restaurante import views
 
 urlpatterns = [
-path('', views.Index.as_view(), name='index'),
+path('', views.index, name='index'),
 
 ] 
 
