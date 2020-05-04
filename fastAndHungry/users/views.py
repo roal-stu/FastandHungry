@@ -11,6 +11,7 @@ from django.views import View
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from .decorators import*
 
 
@@ -125,4 +126,10 @@ def edituser(request):
 
 
 
-	
+# 	{% block body %}
+# <div class="container">
+#     <h1>Perfil</h1>
+#     <p>Usuario: {{ user }}</p>
+#     <p>Email: {{ user.email }}</p>
+#     <a class="btn btn-light btn-xl" href="{% url 'users:user-edit' %}">Modificar datos</a>
+# </div>
