@@ -1,0 +1,16 @@
+<!-- Top Songs -->
+
+
+{% extends 'restaurante/base.html' %}
+
+{% load static %}
+
+{% block title %}{% endblock title %}
+
+{% block body_content %}
+    <h1>Menú Administrador:</h1>
+
+  	 <span ><a  class="hello-msg" href="{% url 'menu:create-element' %}">Crear Platillo</a></span>
+ 	 
+    
+{% endblock body_content %}

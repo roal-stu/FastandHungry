@@ -9,12 +9,12 @@
 {% endblock head %}
 
 
-{% block body_content %}
+{% block body_content %}    
     <div>
         <h2>{{category.name}}</h2>
         <ul>
             {% for element in category.element_set.all %}
-            <li>{{element.name}}</li>
+            <li><a id="element" href="/platillo/{{ element.id }}/">{{ element }}</a></li>
             {% endfor %}
         </ul>
     </div>

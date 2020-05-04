@@ -24,7 +24,6 @@ class ElementView(View):
     TODO: Show a element of the menu
     """
     template = "menu/element.html"
-
     def get(self, request, id):
         """GET method."""
         element = get_object_or_404(Element, id=id)

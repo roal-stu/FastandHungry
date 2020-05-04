@@ -1,0 +1,16 @@
+<h3>Customer</h3>
+<hr>
+{% block body_content %}
+<form enctype="multipart/form-data" action="." method="POST">
+    {% csrf_token %}
+
+    {% for field in form %}
+    <div class="addDireccion">
+        {{ field.errors }}
+        {{ field.label_tag }}
+        {{ field }}
+    </div>
+    {% endfor %}
+    <input value="Agregar" type="submit">
+</form>
+{% endblock body_content %}
