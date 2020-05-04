@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect 
 from django.http import HttpResponse
 from django.forms import inlineformset_factory
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
@@ -98,6 +98,28 @@ def homeAdmin(request):
 def logoutUser(request):
 	logout(request)
 	return redirect('users:login')
+
+
+def view_profile(request, pk=None):
+	if pk:
+		user = User.objects.get(pk=pk)
+	else:
+		user = request.user
+		args = {'user': user}
+	return render(request, 'users/profile.html', args)
+
+
+
+def edituser(request):
+	if request.method == 'POST':
+		form = EditProfileForm(request.POST, instance=request.user)
+		if form.is_valid():
+			form.save()
+			return redirect(reverse('users:profile'))
+	else:
+		form = EditProfileForm(instance=request.user)
+		args = {'form': form}
+		return render(request, 'users/user-edit.html', args)
 
 
 

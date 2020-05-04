@@ -12,4 +12,6 @@ urlpatterns = [
     path('direc/', views.direc, name = "direc"),
     path('logout/', views.logoutUser, name="logout"),
     path('homeadmin/', views.homeAdmin, name="homeAdmin"),
+    path('profile/user-edit/', views.edituser, name="user-edit"),
+    path('profile/',views.view_profile, name = "profile"),
 ]
