@@ -57,7 +57,13 @@ def direc(request):
 
 def logPage(request):
 	if request.user.is_authenticated:
-		return redirect('users:home')
+		group = request.user.groups.all()[0].name
+		if group == 'customer':
+			return redirect('users:home')
+
+		if group == 'admin':
+			return redirect('users:homeAdmin')
+		
 	else:
 
 		if request.method == 'POST':
@@ -101,6 +107,7 @@ def logoutUser(request):
 	return redirect('users:login')
 
 
+@login_required(login_url='users:login')
 def view_profile(request, pk=None):
 	if pk:
 		user = User.objects.get(pk=pk)
@@ -110,7 +117,7 @@ def view_profile(request, pk=None):
 	return render(request, 'users/profile.html', args)
 
 
-
+@login_required(login_url='users:login')
 def edituser(request):
 	if request.method == 'POST':
 		form = EditProfileForm(request.POST, instance=request.user)
