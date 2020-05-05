@@ -40,19 +40,53 @@ def registerPage(request):
 		context = {'form':form}
 		return render(request, 'users/register.html', context)
 		
+
+def address(request):
+	direcs =  request.user.customers.all()
+	context = {'direcs':direcs}
+
+	return render(request, 'users/direc.html', context)
+
+
 def direc(request):
 		dire = CreateDirecForm()
 		if request.method == 'POST':
 			dire = CreateDirecForm(request.POST,)
 			if dire.is_valid():
 				dire = dire.save(commit=False)
-				dire.users = request.user
+				# dire.users = request.user
 				dire.save()
-				return redirect('users:home')
+				dire.users.add(request.user)
+				return redirect('users:ver_dirs')
 			
 
 		context = {'form':dire}
 		return render(request, 'users/regis2.html', context)
+
+def updateDir(request, pk):
+
+	direc = Customer.objects.get(id=pk)
+	form = CreateDirecForm(instance=direc)
+
+	if request.method == 'POST':
+		form = CreateDirecForm(request.POST, instance=direc)
+		if form.is_valid():
+			form.save()
+			return redirect('users:ver_dirs')
+
+	context = {'form':form}
+	return render(request, 'users/regis2.html', context)
+
+
+def deleteDir(request, pk):
+	direc = Customer.objects.get(id=pk)
+	if request.method == "POST":
+		direc.delete()
+		return redirect('users:ver_dirs')
+
+	context = {'item':direc}
+	return render(request, 'users/deleteDir.html', context)
+
 
 
 def logPage(request):

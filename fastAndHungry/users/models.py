@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Customer(models.Model):
-	users = models.ForeignKey(User,  on_delete=models.CASCADE, null=True)
+	# users = models.ForeignKey(User,  on_delete=models.CASCADE, null=True)
+	users = models.ManyToManyField(User, null=True, related_name="customers")
 	telefono = models.CharField(max_length=200, null=True)
 	calle = models.CharField(max_length = 200 , null = False)
 	interior = models.CharField(max_length = 100, null= True)
@@ -18,7 +19,7 @@ class Customer(models.Model):
 	
 
 class UserProfile(models.Model):
-	users = models.ForeignKey(User,  on_delete=models.CASCADE, unique=True)
+	users = models.ManyToManyField(User, null=True)
 	foto = models.ImageField(upload_to = "users/media/users/{instance.id}_{instance.name}_{filename}",null=True,blank = True)
 
 	def __str__(self):

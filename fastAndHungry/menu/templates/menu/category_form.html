@@ -12,7 +12,7 @@
 <form action="." method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% for field in form %}
-    <div class="create_artist_input">
+    <div class="create_category_input">
         {{ field.errors }}
         {{ field.label_tag }}
         {{ field }}

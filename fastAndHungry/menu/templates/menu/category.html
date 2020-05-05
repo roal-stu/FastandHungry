@@ -1,0 +1,23 @@
+{% extends 'restaurante/base.html' %}
+
+{% load static %}
+
+{% block title %}Categoria - {{category.name}}{% endblock title %}
+
+{% block head %} 
+<meta name="description" content="Una categoria del menu">
+{% endblock head %}
+
+
+{% block body_content %}
+    <div>
+        <h2>{{category.name}}</h2>
+        <ul>
+            {% for element in category.element_set.all %}
+            <li>{{element.name}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    
+{% endblock body_content %}

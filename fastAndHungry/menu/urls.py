@@ -15,4 +15,9 @@ urlpatterns = [
     path('editar-platillo/<int:pk>/',views.ElementUpdate.as_view(), name = 'update-element'),
     path('eliminar-platillo/<int:pk>/',views.ElementDelete.as_view(), name = 'delete-element' ),
 
+    path('categoria/<int:id>/', views.CategoryView.as_view(), name='see-category'),
+    path('crear-categoria/',views.CategoryCreate.as_view(), name = 'create-category'),
+    path('editar-categoria/<int:pk>/',views.CategoryUpdate.as_view(), name = 'update-category'),
+    path('eliminar-categoria/<int:pk>/',views.CategoryDelete.as_view(), name = 'delete-category' ),
+
 ]
