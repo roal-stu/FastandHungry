@@ -23,3 +23,4 @@ class ElementForm(forms.Form):
         if Element.objects.filter(name=data).count() > 0:
             raise forms.ValidationError("This element name already exists.")
         return data
+

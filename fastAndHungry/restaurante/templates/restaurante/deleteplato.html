@@ -1,3 +1,17 @@
+
+
+
+
+
+
+
+
+
+
+
+
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -26,7 +40,7 @@
                 <a class="navbar-brand" href="{% url 'users:home' %}">Fast and Hungry</a><button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'menu' %}">Menu</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'users:home' %}">Menu</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'users:home' %}">Carrito</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'users:profile' %}">Perfil</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'users:logout' %}">Cerrar Sesión</a></li>
@@ -35,44 +49,22 @@
             </div>
         </nav>
         <!-- Masthead-->
-        <section class="page-section bg-dark text-white">
-           <div class="container">
+        <section class="page-section bg-dark text-white text-center">
+        	<div class="row">
+				<div class="col-lg-7 col-lg-12 col-md-6 text-center">
+				<!-- <div class="card card-body bg-danger"> -->
 
-                <h2 class="text-center mt-0">Tu Información</h2>
-                <hr class="divider my-4" />
-                <div class="row">
-                
-                    <div class="col-lg-5 col-md-6 text-center">
-                        <div class="mt-5">
-                            <i class="fas fa-4x fa-smile text-primary mb-4"></i>
-                            <h3 class="h4 mb-2 text-primary">Nombre de Usuario:</h3>
-                            <p class=" mb-0 h3">{{ user }}</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 text-center">
-                        <div class="mt-5">
-                            <i class="fas fa-4x fa-envelope text-primary mb-4"></i>
-                            <h3 class="h4 mb-2 text-primary">Email</h3>
-                            <p class="mb-5 h3">{{user.email}}</p>
-                        </div>
+			<p>¿Estás seguro?</p>
 
-                    </div>
-                     <div class="col-lg-4 col-md-6 text-center">
-                        <div class="mt-5">
-                            <i class="fas fa-4x fa-home text-primary mb-4"></i>
-                            <h3 class="h4 mb-2 text-primary">Tus direcciones</h3>
-                            <!-- <a class="text-white mb-5 h3" href="{% url 'users:profile' %}">Ver tus direcciones</a> -->
-                            <a class="btn btn-light btn-sm" href="{% url 'users:ver_dirs' %}">Ver tus direcciones</a>
-                        </div>
-                    </div>
-                        <div class="col-lg-7 col-lg-9 col-md-6 text-center">
-                            
-                            <a class="btn btn-light btn-xl" href="{% url 'users:user-edit' %}">Modifica tus datos</a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+			<form action="{% url 'delete_plato' platillo.id  %}" method="POST">
+				
+				{% csrf_token %}
+				<a class="btn btn-warning " href="{% url 'platillos' %}">Cancel</a>
+				<input class="btn btn-danger" type="submit" name="Confirm">
+			</form>
+		</div>
+	</div>
+</div>
         </section>
         <!-- Footer-->
         <footer class="bg-light py-5">
@@ -89,3 +81,23 @@
     </body>
 </html>
 
+{% endblock %}
+
+
+
+
+<div class="row">
+				<div class="col-lg-7 col-lg-12 col-md-6 text-center">
+				<!-- <div class="card card-body bg-danger"> -->
+
+			<p>¿Estás seguro?</p>
+
+			
+				
+				{% csrf_token %}
+				<a class="btn btn-warning " href="{% url 'platillosAdmin' %}">Cancel</a>
+				<input class="btn btn-danger" type="submit" name="Confirm">
+			</form>
+		</div>
+	</div>
+</div>

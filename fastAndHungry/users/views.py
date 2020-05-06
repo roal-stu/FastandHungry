@@ -41,12 +41,16 @@ def registerPage(request):
 		return render(request, 'users/register.html', context)
 		
 
+@login_required(login_url='users:login')
+
 def address(request):
 	direcs =  request.user.customers.all()
 	context = {'direcs':direcs}
 
 	return render(request, 'users/direc.html', context)
 
+
+@login_required(login_url='users:login')
 
 def direc(request):
 		dire = CreateDirecForm()
@@ -63,6 +67,8 @@ def direc(request):
 		context = {'form':dire}
 		return render(request, 'users/regis2.html', context)
 
+@login_required(login_url='users:login')
+
 def updateDir(request, pk):
 
 	direc = Customer.objects.get(id=pk)
@@ -77,6 +83,8 @@ def updateDir(request, pk):
 	context = {'form':form}
 	return render(request, 'users/regis2.html', context)
 
+
+@login_required(login_url='users:login')
 
 def deleteDir(request, pk):
 	direc = Customer.objects.get(id=pk)

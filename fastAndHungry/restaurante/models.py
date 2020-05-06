@@ -1,8 +1,12 @@
 from django.db import models
 
 
-class categoria(models.Model):
+class Categoria(models.Model):
 	name = models.CharField(max_length=100)
+	description = models.CharField(max_length = 200, null = True)
+	def __str__(self):
+		 return f"{self.name}"
+
 
 
 def image_directory_path(instance, filename):
@@ -10,7 +14,7 @@ def image_directory_path(instance, filename):
     return f"media/images/{instance.id}_{instance.name}_{filename}"
 
 class Platillo(models.Model):
-	
+	categoria = models.ManyToManyField(Categoria, null=True)
 	name = models.CharField(max_length=200)
 	price = models.CharField(max_length=100)
 	description = models.CharField(max_length=200)

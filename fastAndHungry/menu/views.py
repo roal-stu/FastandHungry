@@ -25,9 +25,9 @@ class ElementView(View):
     """
     template = "menu/element.html"
 
-    def get(self, request, id):
+    def get(self, request):
         """GET method."""
-        element = get_object_or_404(Element, id=id)
+        element = Element.objects.all()
         context = {"element":element}
         return render(request, self.template, context)
 
