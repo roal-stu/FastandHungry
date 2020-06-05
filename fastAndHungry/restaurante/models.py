@@ -1,31 +1,50 @@
 from django.db import models
 
-
-class Categoria(models.Model):
-	name = models.CharField(max_length=100)
-	description = models.CharField(max_length = 200, null = True)
-	def __str__(self):
-		 return f"{self.name}"
-
-
-
-def image_directory_path(instance, filename):
-    """Get images directory path to save."""
-    return f"media/images/{instance.id}_{instance.name}_{filename}"
-
-class Platillo(models.Model):
-	categoria = models.ManyToManyField(Categoria, null=True)
-	name = models.CharField(max_length=200)
-	price = models.CharField(max_length=100)
-	description = models.CharField(max_length=200)
-	image = models.ImageField(upload_to = image_directory_path,null=True,blank = True)
-
-	def __str__(self):
-		 return f"{self.name}"+ ":  "+ f"{self.description}......"+" "+f"{self.price}"
-
-
-
-
 # Create your models here.
+
+
+def element_image_directory_path(instance,filename):
+    """Get element image directory path to save."""
+    return f"menu/element/images/{instance.pk}_{instance.name}"
+
+
+class Category(models.Model):
+    """Category Model.
+    TODO: represents a category
+    """
+    name = models.CharField(max_length=200)
+    description = models.CharField(max_length=280)
+    image = models.ImageField(upload_to=element_image_directory_path, null=True, blank=True)
+
+    def __str__(self):
+        """Get str representation."""
+        return self.name
+
+    def __repr__(self):
+       """Get str representation."""
+       return self.__str__()
+
+
+class Element(models.Model):
+    """Element Model.
+    TODO: represents a element.
+    Each element must be related to a category
+    """
+
+    name = models.CharField(max_length=200)
+    price = models.IntegerField()
+    description = models.CharField(max_length=280)
+    image = models.ImageField(upload_to=element_image_directory_path, null=True, blank=True)
+
+    #relatiionship
+    category = models.ForeignKey(Category,models.CASCADE)
+
+    def __str__(self):
+        """Get str representation."""
+        return self.name
+
+    def __repr__(self):
+        """Get str representation."""
+        return self.__str__()
 
 

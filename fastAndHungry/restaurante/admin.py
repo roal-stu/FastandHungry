@@ -1,6 +1,9 @@
 from django.contrib import admin
+
+#Models
 from .models import *
-admin.site.register(Platillo)
-admin.site.register(Categoria)
 
 # Register your models here.
+
+admin.site.register(Element)
+admin.site.register(Category)

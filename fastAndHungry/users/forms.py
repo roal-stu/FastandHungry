@@ -6,23 +6,11 @@ from django.forms import ModelForm
 from django.contrib.auth import authenticate
 from .models import*
 
-
-
-class SignUpForm(forms.Form):
-    """Sign up new user form."""
-
-    first_name = forms.CharField(max_length=200)
-    email = forms.EmailField(max_length=200)
-    password = forms.CharField(widget=forms.PasswordInput())
-    calle = forms.CharField(max_length=100)
-    numero = forms.CharField(max_length=100)
-    colonia = forms.CharField(max_length = 100)
-    telefono = forms.CharField(max_length=100)
-    codigoPostal = forms.CharField(max_length = 100)
-
-
-
 class CreateUserForm(UserCreationForm):
+    """Create User Form.
+    TODO: a form to create a new User.
+    Verify that the email and username entered are not registered
+    """
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
@@ -40,14 +28,10 @@ class CreateUserForm(UserCreationForm):
         return data
 
 
-class CreateDirecForm(ModelForm):
+class AddresForm(ModelForm):
+    """Address Form.
+    TODO: Exclude the usuario field
+    """
     class Meta:
-        model = Customer
-        exclude = ["users"]
-
-
-class EditProfileForm(UserChangeForm):
-
-    class Meta:
-        model = User
-        fields = ['username','email']
+        model = Address
+        exclude = ["usuario"]

@@ -1,144 +1,120 @@
  # Create your views here.
-from django.shortcuts import render, redirect 
-from django.http import HttpResponse
-from django.forms import inlineformset_factory
-from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render
+from django.urls import reverse_lazy
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
 from django.views import View
-from django.contrib import messages
-
-from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 from .models import *
-from .forms import*
-from .decorators import*
+from .mixins import *
 
 
-def index(request):
+
+class Index(View):
+    """Index.
+    TODO: Show the initial page for unauthenticated user
+    """
     template = "restaurante/index.html"
-    return render(request, template)
+
+    def get(self, request):
+        return render(request, self.template)
 
 
-   
-@login_required(login_url='users:login')
-def menu(request):
-    platos = Platillo.objects.all()
-    context={'platos':platos}
-    return render(request, 'restaurante/menu.html',context)
-
-	
-@login_required(login_url='users:login')
-@admin_only
-def platillos(request):
-    platos =  Platillo.objects.all()
-    context = {'platos':platos}
-
-    return render(request, 'restaurante/platillos.html', context)
-
-@login_required(login_url='users:login')
-@admin_only
-def cats(request):
-    cats =  Categoria.objects.all()
-    context = {'cats':cats}
-
-    return render(request, 'restaurante/cats.html', context)
+class Menu(LoginRequiredMixin,ListView):
+    """Menu.
+    TODO: Show the full menu
+    """
+    model = Element
+    template_name = 'restaurante/menu.html'
+    login_url = 'users:login'
 
 
-
-@login_required(login_url='users:login')
-@admin_only
-def updatePlato(request, pk):
-
-    platillo = Platillo.objects.get(id=pk)
-    form = CreatePlato(instance=platillo)
-
-    if request.method == 'POST':
-        form = CreatePlato(request.POST,request.FILES, instance=platillo)
-        if form.is_valid():
-            form.save()
-            return redirect('platillosAdmin')
-
-    context = {'form':form}
-    return render(request, 'restaurante/crearPlato.html', context)
+class Elements(AdminOnlyMixin,ListView):
+    """Elements.
+    TODO: Show a list of all elements
+    """
+    login_url = 'users:login'
+    model = Element
+    template_name = 'restaurante/element_list.html'
 
 
-
-@login_required(login_url='users:login')
-@admin_only
-def deletePlato(request, pk):
-    platillo = Platillo.objects.get(id=pk)
-    if request.method == "POST":
-        platillo.delete()
-        return redirect('platillosAdmin')
-
-    context = {'platillo':platillo}
-    return render(request, 'restaurante/deleteplato.html', context)
+class Categorys(AdminOnlyMixin,ListView):
+    """Categorys.
+    TODO: Show a list of all categorys
+    """
+    login_url = 'users:login'
+    model = Category
+    template_name = 'restaurante/category_list.html'
 
 
+class ElementCreate(AdminOnlyMixin, CreateView):
+    """Create Element.
+    TODO: Add  new element
+    """
+    login_url = 'users:login'
+    model = Element
+    fields = '__all__'
+    title = 'Crear Platillo'
+    success_url = reverse_lazy('elements_admin')
 
-@login_required(login_url='users:login')
-@admin_only
-def createPlato(request):
-        form = CreatePlato()
-        if request.method == 'POST':
-            form = CreatePlato(request.POST,request.FILES)
-            if form.is_valid():
-                form = form.save(commit=False)
-                # dire.users = request.user
-                form.save()
-                return redirect('platillosAdmin')
-            
 
-        context = {'form':form}
-        return render(request, 'restaurante/crearPlato.html', context)
+class ElementUpdate(AdminOnlyMixin, UpdateView):
+    """Update Element.
+    TODO: Make changes in an Element
+    """
+    login_url = 'users:login'
+    model = Element
+    fields = '__all__'
+    title = 'Editar Platillo'
+    success_url = reverse_lazy('elements_admin')
+
+
+class ElementDelete(AdminOnlyMixin, DeleteView):
+    """Delete Element.
+    TODO: Delete an Element
+    """
+    login_url = 'users:login'
+    model = Element
+    success_url = reverse_lazy('elements_admin')
 
 
 
-@login_required(login_url='users:login')
-@admin_only
-def updateCat(request, pk):
-
-    cat = Categoria.objects.get(id=pk)
-    form = CreateCat(instance=cat)
-
-    if request.method == 'POST':
-        form = CreateCat(request.POST,instance=cat)
-        if form.is_valid():
-            form.save()
-            return redirect('cats')
-
-    context = {'form':form}
-    return render(request, 'restaurante/createCat.html', context)
+class CategoryCreate(AdminOnlyMixin, CreateView):
+    """Create Category.
+    TODO: Add  new category
+    """
+    login_url = 'users:login'
+    model = Category
+    fields = '__all__'
+    title = 'Crear Categoria'
+    success_url = reverse_lazy('categorys_admin')
 
 
-
-@login_required(login_url='users:login')
-@admin_only
-def deleteCat(request, pk):
-    cat = Categoria.objects.get(id=pk)
-    if request.method == "POST":
-        cat.delete()
-        return redirect('cats')
-
-    context = {'cat':cat}
-    return render(request, 'restaurante/deleteCat.html', context)
+class CategoryUpdate(AdminOnlyMixin, UpdateView):
+    """Update Category.
+    TODO: Make changes in a Category
+    """
+    login_url = 'users:login'
+    model = Category
+    fields = '__all__'
+    title = 'Editar Categoria'
+    success_url = reverse_lazy('categorys_admin')
 
 
 
-@login_required(login_url='users:login')
-@admin_only
-def createCat(request):
-        form = CreateCat()
-        if request.method == 'POST':
-            form = CreateCat(request.POST)
-            if form.is_valid():
-                form = form.save(commit=False)
-                # dire.users = request.user
-                form.save()
-                return redirect('cats')
-            
+class CategoryDelete(AdminOnlyMixin, DeleteView):
+    """Delete Category.
+    TODO: Delete a Category
+    """
+    login_url = 'users:login'
+    model = Category
+    success_url = reverse_lazy('categorys_admin')
 
-        context = {'form':form}
-        return render(request, 'restaurante/createCat.html', context)
+
+
+
+

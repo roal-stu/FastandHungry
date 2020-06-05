@@ -1,184 +1,187 @@
-from django.shortcuts import render
-
- # Create your views here.
 from django.shortcuts import render, redirect 
-from django.http import HttpResponse
-from django.forms import inlineformset_factory
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-
 from django.contrib.auth import authenticate, login, logout
-from django.views import View
 from django.contrib import messages
-from django.contrib.auth.models import Group
-from django.contrib.auth.decorators import login_required
-from django.urls import reverse
-from .decorators import*
+from django.urls import reverse_lazy
 
+
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.detail import DetailView
+
+from django.views import View
 
 # Create your views here.
 from .models import *
+from restaurante.mixins import *
 from .forms import *
 
 
-def registerPage(request):
-	if request.user.is_authenticated:
-		return redirect('home')
-	else:
-		form = CreateUserForm()
-		if request.method == 'POST':
-			form = CreateUserForm(request.POST)
-			if form.is_valid():
-				user = form.save()
-				username = form.cleaned_data.get('username')
-				group = Group.objects.get(name='customer')
-				user.groups.add(group)
-				messages.success(request, 'Cuenta creada con exito con el usuario: ' + username)
+class Home(LoginRequiredMixin,View):
+    """Home.
+    TODO: Show the home page for a customer
+    """
+    template = 'users/home.html'
+    login_url = 'users:login'
 
-				return redirect('users:login')
-			
-
-		context = {'form':form}
-		return render(request, 'users/register.html', context)
-		
-
-@login_required(login_url='users:login')
-
-def address(request):
-	direcs =  request.user.customers.all()
-	context = {'direcs':direcs}
-
-	return render(request, 'users/direc.html', context)
+    def get(self, request):
+        return render(request, self.template)
 
 
-@login_required(login_url='users:login')
+class AdminHome(AdminOnlyMixin,View):
+    """Admin Home.
+    TODO: Show the home page for a admin
+    """
+    template = 'users/admin.html'
+    login_url = 'users:login'
 
-def direc(request):
-		dire = CreateDirecForm()
-		if request.method == 'POST':
-			dire = CreateDirecForm(request.POST,)
-			if dire.is_valid():
-				dire = dire.save(commit=False)
-				# dire.users = request.user
-				dire.save()
-				dire.users.add(request.user)
-				return redirect('users:ver_dirs')
-			
-
-		context = {'form':dire}
-		return render(request, 'users/regis2.html', context)
-
-@login_required(login_url='users:login')
-
-def updateDir(request, pk):
-
-	direc = Customer.objects.get(id=pk)
-	form = CreateDirecForm(instance=direc)
-
-	if request.method == 'POST':
-		form = CreateDirecForm(request.POST, instance=direc)
-		if form.is_valid():
-			form.save()
-			return redirect('users:ver_dirs')
-
-	context = {'form':form}
-	return render(request, 'users/regis2.html', context)
+    def get(self, request):
+        return render(request, self.template)
 
 
-@login_required(login_url='users:login')
+class LogIn(View):
+    """Log In
+    TODO: Show a form to log in
+    """
+    template = 'users/login.html'
 
-def deleteDir(request, pk):
-	direc = Customer.objects.get(id=pk)
-	if request.method == "POST":
-		direc.delete()
-		return redirect('users:ver_dirs')
+    def get(self,request):
+        if request.user.is_authenticated:
+            if request.user.is_admin:
+                return redirect('users:home_admin')
+            else : 
+                return redirect('users:home')
+        else:
+            return render(request, self.template)
 
-	context = {'item':direc}
-	return render(request, 'users/deleteDir.html', context)
+    def post(self,request):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
+        user = authenticate(request, username = username, password = password)
 
+        if user is not None:
+            login(request, user)
 
-def logPage(request):
-	if request.user.is_authenticated:
-		group = request.user.groups.all()[0].name
-		if group == 'customer':
-			return redirect('users:home')
+            if user.is_admin:
+                return redirect('users:home_admin')
 
-		if group == 'admin':
-			return redirect('users:homeAdmin')
-		
-	else:
+            else:
+                return redirect('users:home')
+                
+        else:
+            messages.info(request, 'Usuario o contraseña incorrectos')
+            return render(request, self.template)
 
-		if request.method == 'POST':
-			username = request.POST.get('username')
-			password = request.POST.get('password')
-
-			user = authenticate(request, username = username, password = password)
-
-			if user is not None:
-
-				login(request, user)
-				group = None
-				if request.user.groups.exists():
-					group = request.user.groups.all()[0].name
-
-				if group == 'customer':
-					return redirect('users:home')
-
-				if group == 'admin':
-					return redirect('users:homeAdmin')
-				
-			else:
-				messages.info(request, 'Usuario o contraseña incorrectos')
-		context = {}
-		return render(request, 'users/login.html',context)
+    
+class Logout(View):
+    """LogOut.
+    TODO: Log Out
+    """
+    def get(self, request):
+        logout(request)
+        return redirect('/')
 
 
-@login_required(login_url='users:login')
-def home(request):
-	return render(request, 'users/home.html',{} )
+class Register(View):
+    """Register
+    TODO: Show a form to register a new user
+    """
+    template = 'users/register.html'
+    form = CreateUserForm()
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('user : home')
+        else:
+            context = {'form':self.form}
+            return render(request, self.template, context)
+
+    def post(self, request):
+        self.form = form = CreateUserForm(request.POST)
+        if self.form.is_valid():
+            user = self.form.save()
+            username = self.form.cleaned_data.get('username')
+            user.is_customer = True
+            user.save()
+            messages.success(request, 'Cuenta creada con exito con el usuario: ' + username)
+
+            return redirect('users:login')
+        else: 
+            context = {'form':self.form}
+            return render(request, self.template, context)
 
 
-@login_required(login_url='users:login')
-@admin_only
-def homeAdmin(request):
-	return render(request, 'users/menu.html',{} )
+class Addresses(LoginRequiredMixin,ListView):
+    """Adresses.
+    TODO: Show a list of all addresses
+    """
+    login_url = 'users:login'
+    model = Address
+    template_name = 'users/address_list.html'
+
+    def get_queryset(self):
+        return Address.objects.all().filter(usuario = self.request.user)
 
 
-def logoutUser(request):
-	logout(request)
-	return redirect('users:login')
+class AddressCreate(LoginRequiredMixin, CreateView):
+    """Create Address.
+    TODO: Add  new address to the current user
+    """
+    login_url = 'users:login'
+    model = Address
+    form_class = AddresForm
+    success_url = reverse_lazy('users:address_list')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.usuario = self.request.user
+        obj.save()        
+        return super().form_valid(form)
 
 
-@login_required(login_url='users:login')
-def view_profile(request, pk=None):
-	if pk:
-		user = User.objects.get(pk=pk)
-	else:
-		user = request.user
-		args = {'user': user}
-	return render(request, 'users/profile.html', args)
+class AddressUpdate(LoginRequiredMixin, UpdateView):
+    """Update Address.
+    TODO: Make changes in an Address
+    """
+    login_url = 'users:login'
+    model = Address
+    form_class = AddresForm
+    success_url = reverse_lazy('users:address_list')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.usuario = self.request.user
+        obj.save()        
+        return super().form_valid(form)
 
 
-@login_required(login_url='users:login')
-def edituser(request):
-	if request.method == 'POST':
-		form = EditProfileForm(request.POST, instance=request.user)
-		if form.is_valid():
-			form.save()
-			return redirect(reverse('users:profile'))
-	else:
-		form = EditProfileForm(instance=request.user)
-		args = {'form': form}
-		return render(request, 'users/user-edit.html', args)
+class AddressDelete(LoginRequiredMixin, DeleteView):
+    """Delete Addres.
+    TODO: Delete an address
+    """
+    login_url = 'users:login'
+    model = Address
+    success_url = reverse_lazy('users:address_list')
 
+class ProfileView(LoginRequiredMixin, DetailView):
+    """Profile.
+    TODO: Show current user information
+    """
+    login_url = 'users:login'
+    model = User
 
+    def get_object(self):
+        return self.request.user
 
+class ProfileUpdate(LoginRequiredMixin, UpdateView):
+    """Update Profile.
+    TODO: Make changes in the current user
+    """
+    login_url = 'users:login'
+    model = User
+    fields = ['first_name','last_name','email','phone_number']
+    success_url = reverse_lazy('users:profile')
 
-
-# 	{% block body %}
-# <div class="container">
-#     <h1>Perfil</h1>
-#     <p>Usuario: {{ user }}</p>
-#     <p>Email: {{ user.email }}</p>
-#     <a class="btn btn-light btn-xl" href="{% url 'users:user-edit' %}">Modificar datos</a>
-# </div>
+    def get_object(self):
+        return self.request.user
