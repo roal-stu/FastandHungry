@@ -1,0 +1,53 @@
+{% extends 'restaurante/base.html' %}
+{% load static %}
+
+{% block body_content %}
+        <!-- Masthead-->
+        <section class="page-section bg-dark text-white">
+           <div class="container">
+
+                <h2 class="text-center mt-0">Bienvenido {{user}}</h2>
+                
+                <hr class="divider my-4" />
+                <div class="row">
+                
+                     <div class="col-lg-4 col-md-6 text-center">
+                        <div class="mt-5">
+                            <i class="fas fa-4x fa-utensils text-primary mb-4"></i>
+                             <h3 class="h4 mb-2 text-primary">Platillos</h3> 
+                            <!-- <a class="text-white mb-5 h3" href="{% url 'users:profile' %}">Ver tus direcciones</a> -->
+                            <a class="btn btn-light btn-sm" href="{% url 'elements_admin' %}">Modificar</a>
+                        </div>
+                    </div>	
+                    <div class="col-lg-4 col-md-6 text-center">
+                        <div class="mt-5">
+                            <i class="fas fa-4x fa-align-justify text-primary mb-4"></i>
+                            <h3 class="h4 mb-2 text-primary">Categorias</h3>
+                            <!-- <a class="text-white mb-5 h3" href="{% url 'users:profile' %}">Ver tus direcciones</a> -->
+                            <a class="btn btn-light btn-sm" href="{% url 'categorys_admin' %}">Modificar</a>
+                        </div>
+                    </div>
+                     <div class="col-lg-4 col-md-6 text-center">
+                        <div class="mt-5">
+                            <i class="fas fa-4x fa-hand-holding-usd text-primary mb-4"></i>
+                            <h3 class="h4 mb-2 text-primary">Ordenes</h3>
+                            <!-- <a class="text-white mb-5 h3" href="{% url 'users:profile' %}">Ver tus direcciones</a> -->
+                            <a class="btn btn-light btn-sm" href="{% url 'users:home_admin' %}">Ordenes</a>
+                        </div>
+                    </div>
+                     <div class="col-lg-4 col-md-6 text-center">
+                        <div class="mt-5">
+                            <i class="fas fa-4x fa-motorcycle text-primary mb-4"></i>
+                            <h3 class="h4 mb-2 text-primary">Repartidores</h3>
+                            <!-- <a class="text-white mb-5 h3" href="{% url 'users:profile' %}">Ver tus direcciones</a> -->
+                            <a class="btn btn-light btn-sm" href="{% url 'users:home_admin' %}">Administrar</a>
+                        </div>
+                    </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+{% endblock body_content %}
