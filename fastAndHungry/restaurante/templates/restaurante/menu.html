@@ -2,32 +2,29 @@
 {% load static %}
 
 {% block body_content %}
-        <!-- Masthead-->
-        <section class="page-section bg-dark text-white">
-           <div class="container">
+<!-- Masthead-->
+<section class="page-section bg-dark text-white">
+    <div class="container">
 
-                <h2 class="text-center mt-0">Nuestro Menú</h2>
-                
-                <hr class="divider my-4" />
-                <div class="row">
-                
-                     <div class="col-lg-12 col-md-9 text-center mt5">
-                        {% for el in object_list %}
-                        <div class="col-lg-12 col-md-6 mt-5 text-center m">
-        				<li>{{el.name}}......{{el.description}}......${{el.price}}.00</li>
-        				
-        				
-       					 {% if el.image %}
-   						 <img src= "{{el.image.url}}" width="300" height="250" >
-							{% endif %}
-       						 {% endfor %}
-       				    </div>
+        <h2 class="text-center mt-0">Nuestro Menú</h2>
+        <hr class="divider my-4" />
 
-                    </div>
+        <div class="container-cards">
+            {% for cat in object_list %}
+            
+            <div class="col-lg-3 col-md-6 card-elem">
+                <a href = "{% url 'restaurante:category' cat.id %}" class="area-link"></a> 
+                <img {% if cat.image %} src= "{{cat.image.url}}" {% else %} src= "" {% endif %} >
+                <h3 class="h4 mb-2 mt-2 text-primary">{{ cat.name }}</h3>
+                <p>{{ cat.description }}</p>
 
-                </div>
             </div>
-        </section>
+
+            {% endfor %}
+        </div>
+    
+    </div>
+</section>
 {% endblock body_content %}
 
 
