@@ -1,0 +1,29 @@
+{% extends 'restaurante/base.html' %}
+{% load static %}
+
+{% block body_content %}
+<!-- Masthead-->
+<section class="page-section bg-dark text-white">
+    <div class="container">
+
+        <h2 class="text-center mt-0">{{ category_name }}</h2>
+        <hr class="divider my-4" />
+
+        <div class="container-cards">
+            {% for element in object_list %}
+            
+            <div class="col-lg-3 col-md-6 card-elem">
+                <!--a href = "{% url 'restaurante:category' element.id %}" class="area-link"></a--> 
+                <img {% if element.image %} src= "{{element.image.url}}" {% else %} src= "" {% endif %} >
+                <h3 class="h4 mb-2 mt-2 text-primary">{{ element.name }}</h3>
+                <p>{{ element.description }}\n{{ element.price }}</p>
+                
+
+            </div>
+
+            {% endfor %}
+        </div>
+    
+    </div>
+</section>
+{% endblock body_content %}
