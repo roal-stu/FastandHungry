@@ -13,7 +13,7 @@
 			<form action="" method="POST">
 				
 				{% csrf_token %}
-				<a class="btn btn-warning " href="{% url 'elements_admin' %}">Cancel</a>
+				<a class="btn btn-warning " href="{% url 'restaurante:elements_admin' %}">Cancel</a>
 				<input class="btn btn-danger" type="submit" name="Confirm">
 			</form>
 		        </div>
