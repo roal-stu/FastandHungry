@@ -12,6 +12,7 @@ app_name = "restaurante"
 urlpatterns = [
 	path('', views.Index.as_view(), name='index'),
 	path('menu/', views.Menu.as_view(), name='menu'),
+	path('menu/category/<int:pk>/', views.CategoryView.as_view(), name='category'),
 
 	path('elements-admin/', views.Elements.as_view(), name = 'elements_admin'),
 	path('update-element/<int:pk>/', views.ElementUpdate.as_view(), name="element_edit"),

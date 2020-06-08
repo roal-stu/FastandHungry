@@ -28,9 +28,26 @@ class Menu(LoginRequiredMixin,ListView):
     """Menu.
     TODO: Show the full menu
     """
-    model = Element
+    model = Category
     template_name = 'restaurante/menu.html'
     login_url = 'users:login'
+
+
+class CategoryView(LoginRequiredMixin,ListView):
+    """Category.
+    TODO: Show all the elements of one category of the menu
+    """
+    model = Element
+    template_name = 'restaurante/category_menu.html'
+    login_url = 'users:login'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(category_id = self.kwargs.get('pk'))
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CategoryView, self).get_context_data(*args, **kwargs)
+        context['category_name'] = Category.objects.get(id = self.kwargs.get('pk'))
+        return context
 
 
 class Elements(AdminOnlyMixin,ListView):

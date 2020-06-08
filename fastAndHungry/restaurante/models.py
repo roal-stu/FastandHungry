@@ -46,5 +46,3 @@ class Element(models.Model):
     def __repr__(self):
         """Get str representation."""
         return self.__str__()
-
-
