@@ -8,6 +8,7 @@ from django.conf import settings
 # Views
 from restaurante import views
 
+app_name = "restaurante"
 urlpatterns = [
 	path('', views.Index.as_view(), name='index'),
 	path('menu/', views.Menu.as_view(), name='menu'),

@@ -59,7 +59,7 @@ class ElementCreate(AdminOnlyMixin, CreateView):
     model = Element
     fields = '__all__'
     title = 'Crear Platillo'
-    success_url = reverse_lazy('elements_admin')
+    success_url = reverse_lazy('restaurante:elements_admin')
 
 
 class ElementUpdate(AdminOnlyMixin, UpdateView):
@@ -70,7 +70,7 @@ class ElementUpdate(AdminOnlyMixin, UpdateView):
     model = Element
     fields = '__all__'
     title = 'Editar Platillo'
-    success_url = reverse_lazy('elements_admin')
+    success_url = reverse_lazy('restaurante:elements_admin')
 
 
 class ElementDelete(AdminOnlyMixin, DeleteView):
@@ -79,8 +79,7 @@ class ElementDelete(AdminOnlyMixin, DeleteView):
     """
     login_url = 'users:login'
     model = Element
-    success_url = reverse_lazy('elements_admin')
-
+    success_url = reverse_lazy('restaurante:elements_admin')
 
 
 class CategoryCreate(AdminOnlyMixin, CreateView):
@@ -91,7 +90,7 @@ class CategoryCreate(AdminOnlyMixin, CreateView):
     model = Category
     fields = '__all__'
     title = 'Crear Categoria'
-    success_url = reverse_lazy('categorys_admin')
+    success_url = reverse_lazy('restaurante:categorys_admin')
 
 
 class CategoryUpdate(AdminOnlyMixin, UpdateView):
@@ -102,8 +101,7 @@ class CategoryUpdate(AdminOnlyMixin, UpdateView):
     model = Category
     fields = '__all__'
     title = 'Editar Categoria'
-    success_url = reverse_lazy('categorys_admin')
-
+    success_url = reverse_lazy('restaurante:categorys_admin')
 
 
 class CategoryDelete(AdminOnlyMixin, DeleteView):
@@ -112,9 +110,4 @@ class CategoryDelete(AdminOnlyMixin, DeleteView):
     """
     login_url = 'users:login'
     model = Category
-    success_url = reverse_lazy('categorys_admin')
-
-
-
-
-
+    success_url = reverse_lazy('restaurante:categorys_admin')
