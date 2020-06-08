@@ -164,6 +164,7 @@ class AddressDelete(LoginRequiredMixin, DeleteView):
     model = Address
     success_url = reverse_lazy('users:address_list')
 
+
 class ProfileView(LoginRequiredMixin, DetailView):
     """Profile.
     TODO: Show current user information
@@ -173,6 +174,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         return self.request.user
+
 
 class ProfileUpdate(LoginRequiredMixin, UpdateView):
     """Update Profile.
@@ -185,3 +187,45 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return self.request.user
+
+
+class DeliveryManCreate(AdminOnlyMixin, CreateView):
+    """Create Delevery man.
+    TODO: Add new delevery man
+    """
+    login_url = 'users:login'
+    model = User
+    form_class = CreateUserForm
+    success_url = reverse_lazy('users:delivery_man_list')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.is_delivery_man = True
+        obj.save()        
+        return super().form_valid(form)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(DeliveryManCreate, self).get_context_data(*args, **kwargs)
+        context['is_dm_create'] = True
+        return context
+
+
+class DeliveryManList(AdminOnlyMixin, ListView):
+    """Delivery Man List.
+    TODO: Show a list of all delivery mans
+    """
+    login_url = 'users:login'
+    model = User
+    template_name = 'users/delivery_man_list.html'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_delivery_man = True)
+
+
+class UserDelete(AdminOnlyMixin, DeleteView):
+    """Delete Delivery Man.
+    TODO: Delete a Delivery Man
+    """
+    login_url = 'users:login'
+    model = User
+    success_url = reverse_lazy('users:delivery_man_list')

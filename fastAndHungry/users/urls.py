@@ -21,7 +21,9 @@ urlpatterns = [
 
     path('profile/user-edit/', views.ProfileUpdate.as_view(), name="user_edit"),
     path('profile/',views.ProfileView.as_view(), name = "profile"),
-    
-    
+    path('delete-user/<int:pk>/', views.UserDelete.as_view(), name='user_delete'),
+
+    path('register-delivery-man/', views.DeliveryManCreate.as_view(), name='register_delivery_man'),
+    path('delivery-man-list/', views.DeliveryManList.as_view(), name='delivery_man_list'),
 
 ]
