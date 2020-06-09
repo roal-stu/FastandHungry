@@ -62,8 +62,24 @@ class Order(models.Model):
     ]
 
     state = models.CharField(choices=ORDER_STATES,max_length=2)
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     address = models.ForeignKey(Address,null=True,on_delete=models.SET_NULL)
+
+    def add_element(self, new_element, quantity):
+        element, is_new = self.order_elems.get_or_create(element = new_element)
+        if is_new:
+            element.quantity = quantity
+        else:
+            element.quantity += quantity
+        element.save()
+           
+    def __str__(self):
+        """Get str representation."""
+        return 'Orden de %s. %s' % (self.user.username, self.state)
+
+    def __repr__(self):
+       """Get str representation."""
+       return self.__str__()
 
 
 class OrderElement(models.Model):
@@ -71,11 +87,16 @@ class OrderElement(models.Model):
     TODO: represents a element inside a order
     """
     element = models.ForeignKey(Element,on_delete=models.CASCADE)
-    order = models.ForeignKey(Order,on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    order = models.ForeignKey(Order,on_delete=models.CASCADE, related_name='order_elems')
+    quantity = models.IntegerField(default = 1)
 
     def get_subtotal(self):
         return self.quantity * self.element.price
 
     def __str__(self):
-        return self.quantity 
+        """Get str representation."""
+        return '%s.- Elemento de la orden %s. Cont: %i %s' % (self.id, self.order, self.quantity, self.element.name)
+
+    def __repr__(self):
+       """Get str representation."""
+       return self.__str__()

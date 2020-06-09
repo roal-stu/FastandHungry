@@ -1,5 +1,5 @@
  # Create your views here.
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -11,6 +11,7 @@ from django.views import View
 # Create your views here.
 from .models import *
 from .mixins import *
+from .forms import *
 
 
 
@@ -45,8 +46,10 @@ class CategoryView(LoginRequiredMixin,ListView):
         return super().get_queryset().filter(category_id = self.kwargs.get('pk'))
 
     def get_context_data(self, *args, **kwargs):
+        form = AddToCartForm()
         context = super(CategoryView, self).get_context_data(*args, **kwargs)
         context['category_name'] = Category.objects.get(id = self.kwargs.get('pk'))
+        context['form'] = form
         return context
 
 
@@ -128,3 +131,26 @@ class CategoryDelete(AdminOnlyMixin, DeleteView):
     login_url = 'users:login'
     model = Category
     success_url = reverse_lazy('restaurante:categorys_admin')
+
+
+class AddToCart(LoginRequiredMixin, View):
+    """Category.
+    TODO: Show all the elements of one category of the menu
+    """
+    template_name = 'restaurante/category_menu.html'
+
+    def post(self,request,*args,**kwargs):
+        """Receive and validate sign up form."""
+        form = AddToCartForm(request.POST)
+        cart, is_new_cart  = Order.objects.get_or_create(user = request.user, state = 'CT')
+
+        element = Element.objects.get(id = self.kwargs.get('pk'))
+        context = {}
+
+        if form.is_valid():    
+            quantity = form.cleaned_data.get("quantity")        
+            cart.add_element(element,quantity)
+ 
+        context = {"form": form}
+        pk = element.category.id
+        return redirect( reverse_lazy('restaurante:category',kwargs={'pk': pk}))

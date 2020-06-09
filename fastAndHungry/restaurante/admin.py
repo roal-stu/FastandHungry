@@ -7,3 +7,5 @@ from .models import *
 
 admin.site.register(Element)
 admin.site.register(Category)
+admin.site.register(OrderElement)
+admin.site.register(Order)

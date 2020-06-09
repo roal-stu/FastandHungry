@@ -13,12 +13,24 @@
             {% for element in object_list %}
             
             <div class="col-lg-3 col-md-6 card-elem">
-                <!--a href = "{% url 'restaurante:category' element.id %}" class="area-link"></a--> 
+                
                 <img {% if element.image %} src= "{{element.image.url}}" {% else %} src= "" {% endif %} >
                 <h3 class="h4 mb-2 mt-2 text-primary">{{ element.name }}</h3>
-                <p>{{ element.description }}\n{{ element.price }}</p>
-                
+                <p>{{ element.description }}</p><p></p>${{ element.price }}</p>
 
+                <form action="{% url 'restaurante:add_to_cart' element.id %}" method="POST">
+                    {% csrf_token %}
+                 
+                    {% for field in form %}
+
+       					{{ field.errors }}
+        				{{ field.label_tag }}
+                        {{ field }}
+                        
+ 					{% endfor %}
+                    <input class="btn btn-sm btn-info" type="submit" value="Agregar al cart">
+                </form>
+        
             </div>
 
             {% endfor %}
