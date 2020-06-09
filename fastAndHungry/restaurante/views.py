@@ -133,11 +133,29 @@ class CategoryDelete(AdminOnlyMixin, DeleteView):
     success_url = reverse_lazy('restaurante:categorys_admin')
 
 
+class CartView(LoginRequiredMixin, ListView):
+    """Category.
+    TODO: Show all the elements of one category of the menu
+    """
+    model = OrderElement
+    template_name = 'restaurante/cart.html'
+    login_url = 'users:login'
+
+    def get_queryset(self):
+        cart, is_new_cart  = Order.objects.get_or_create(user = self.request.user, state = 'CT')
+        return super().get_queryset().filter(order = cart)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CartView, self).get_context_data(*args, **kwargs)
+        return context
+
+
 class AddToCart(LoginRequiredMixin, View):
     """Category.
     TODO: Show all the elements of one category of the menu
     """
     template_name = 'restaurante/category_menu.html'
+    login_url = 'users:login'
 
     def post(self,request,*args,**kwargs):
         """Receive and validate sign up form."""
