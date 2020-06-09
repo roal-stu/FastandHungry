@@ -23,7 +23,7 @@
 					<td>$ {{element.element.price}}</td>
 					<td>{{element.quantity}}</td>
 					<td> {{element.get_subtotal}}</td>
-					<td><a class="btn btn-sm btn-danger" href="{% url 'restaurante:element_delete' element.id %}">Delete</a></td>
+					<td><a class="btn btn-sm btn-danger" href="{% url 'restaurante:element_cart_delete' element.id %}">Delete</a></td>
 				</tr>
 				{% endfor %}
 

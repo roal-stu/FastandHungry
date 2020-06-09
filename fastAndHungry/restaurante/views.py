@@ -134,8 +134,8 @@ class CategoryDelete(AdminOnlyMixin, DeleteView):
 
 
 class CartView(LoginRequiredMixin, ListView):
-    """Category.
-    TODO: Show all the elements of one category of the menu
+    """Cart View.
+    TODO: Show all the elements of the current user cart
     """
     model = OrderElement
     template_name = 'restaurante/cart.html'
@@ -151,14 +151,14 @@ class CartView(LoginRequiredMixin, ListView):
 
 
 class AddToCart(LoginRequiredMixin, View):
-    """Category.
-    TODO: Show all the elements of one category of the menu
+    """Add To Cart.
+    TODO: Lets add an element to the cart
     """
     template_name = 'restaurante/category_menu.html'
     login_url = 'users:login'
 
     def post(self,request,*args,**kwargs):
-        """Receive and validate sign up form."""
+        """Receive and validate add to cart form."""
         form = AddToCartForm(request.POST)
         cart, is_new_cart  = Order.objects.get_or_create(user = request.user, state = 'CT')
 
@@ -172,3 +172,15 @@ class AddToCart(LoginRequiredMixin, View):
         context = {"form": form}
         pk = element.category.id
         return redirect( reverse_lazy('restaurante:category',kwargs={'pk': pk}))
+
+
+class DeleteFromCart(LoginRequiredMixin,DeleteView):
+    """Delete From Cart.
+    TODO: Lets delete an element from the cart
+    """
+    login_url = 'users:login'
+    model = OrderElement
+    success_url = reverse_lazy('restaurante:cart')
+
+    def get(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)

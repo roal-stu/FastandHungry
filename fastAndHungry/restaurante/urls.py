@@ -25,7 +25,8 @@ urlpatterns = [
 	path('create-category/', views.CategoryCreate.as_view(), name="category_create"),
 
 	path('add-to-cart/<int:pk>/', views.AddToCart.as_view(), name='add_to_cart'),
-	path('cart/', views.CartView.as_view(), name='cart')
+	path('cart/', views.CartView.as_view(), name='cart'),
+	path('delete-cart-element/<int:pk>/', views.DeleteFromCart.as_view(), name='element_cart_delete'),
 	
 ] 
 
