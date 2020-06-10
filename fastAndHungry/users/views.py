@@ -102,7 +102,6 @@ class Register(View):
         if self.form.is_valid():
             user = self.form.save()
             username = self.form.cleaned_data.get('username')
-            user.is_customer = True
             user.save()
             messages.success(request, 'Cuenta creada con exito con el usuario: ' + username)
 

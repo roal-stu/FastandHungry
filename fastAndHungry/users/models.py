@@ -10,7 +10,6 @@ class User(AbstractUser):
 	"""User Model.
     TODO: extends the django user model
     """
-	is_customer = models.BooleanField(default=False)
 	is_admin = models.BooleanField(default=False)
 	is_delivery_man = models.BooleanField(default=False)
 
