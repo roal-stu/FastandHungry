@@ -1,5 +1,5 @@
  # Create your views here.
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -11,6 +11,7 @@ from django.views import View
 # Create your views here.
 from .models import *
 from .mixins import *
+from .forms import *
 
 
 
@@ -45,8 +46,10 @@ class CategoryView(LoginRequiredMixin,ListView):
         return super().get_queryset().filter(category_id = self.kwargs.get('pk'))
 
     def get_context_data(self, *args, **kwargs):
+        form = AddToCartForm()
         context = super(CategoryView, self).get_context_data(*args, **kwargs)
         context['category_name'] = Category.objects.get(id = self.kwargs.get('pk'))
+        context['form'] = form
         return context
 
 
@@ -128,3 +131,185 @@ class CategoryDelete(AdminOnlyMixin, DeleteView):
     login_url = 'users:login'
     model = Category
     success_url = reverse_lazy('restaurante:categorys_admin')
+
+
+class CartView(LoginRequiredMixin, ListView):
+    """Cart View.
+    TODO: Show all the elements of the current user cart
+    """
+    model = OrderElement
+    template_name = 'restaurante/cart.html'
+    login_url = 'users:login'
+
+    def get_queryset(self):
+        cart, is_new_cart  = Order.objects.get_or_create(customer = self.request.user, state = 'CT')
+        return super().get_queryset().filter(order = cart)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CartView, self).get_context_data(*args, **kwargs)
+        return context
+
+
+class AddToCart(LoginRequiredMixin, View):
+    """Add To Cart.
+    TODO: Lets add an element to the cart
+    """
+    template_name = 'restaurante/category_menu.html'
+    login_url = 'users:login'
+
+    def post(self,request,*args,**kwargs):
+        """Receive and validate add to cart form."""
+        form = AddToCartForm(request.POST)
+        cart, is_new_cart  = Order.objects.get_or_create(customer = request.user, state = 'CT')
+
+        element = Element.objects.get(id = self.kwargs.get('pk'))
+        context = {}
+
+        if form.is_valid():    
+            quantity = form.cleaned_data.get("quantity")        
+            cart.add_element(element,quantity)
+ 
+        context = {"form": form}
+        pk = element.category.id
+        return redirect( reverse_lazy('restaurante:category',kwargs={'pk': pk}))
+
+
+class DeleteFromCart(LoginRequiredMixin,DeleteView):
+    """Delete From Cart.
+    TODO: Lets delete an element from the cart
+    """
+    login_url = 'users:login'
+    model = OrderElement
+    success_url = reverse_lazy('restaurante:cart')
+
+    def get(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+
+class OrderView(StaffOnlyMixin,DetailView):
+    """Order.
+    TODO: Show the order information
+    """
+    login_url = 'users:login'
+    model = User
+    
+    
+class MakeAnOrder(LoginRequiredMixin,UpdateView):
+    """Make an order.
+    TODO: Allows confirm the order that is in the cart
+    """
+    login_url = 'users:login'
+    model = Order
+    fields = ['address']
+    success_url = reverse_lazy('users:home')
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.state = 'LT'
+        self.object.save()
+        return super().post(request, *args, **kwargs)
+
+
+class MarkOrderReady(AdminOnlyMixin,View):
+    """Mark order ready.
+    TODO: Allow mark an order as ready
+    """
+    login_url = 'users:login'
+    success_url = reverse_lazy('restaurante:index')
+
+    def get(self, request, *args, **kwargs):
+        order = Order.objects.get(id = self.kwargs.get('pk'))
+        order.state = 'LT'
+        order.save()
+        return redirect(self.success_url)
+
+
+class MarkOrderOnWay(DeliveryManOnlyMixin,View):
+    """Mark order on way.
+    TODO: Allow mark an order as on way
+    """
+    login_url = 'users:login'
+    success_url = reverse_lazy('restaurante:index')
+
+    def get(self, request, *args, **kwargs):
+        order = Order.objects.get(id = self.kwargs.get('pk'))
+        order.state = 'EC'
+        order.save()
+        return redirect(self.success_url)
+
+
+class MarkOrderDelivered(DeliveryManOnlyMixin,View):
+    """Mark order delivered.
+    TODO: Allow mark an order as delivered
+    """
+    login_url = 'users:login'
+    success_url = reverse_lazy('restaurante:index')
+
+    def get(self, request, *args, **kwargs):
+        order = Order.objects.get(id = self.kwargs.get('pk'))
+        order.state = 'ET'
+        order.save()
+        return redirect(self.success_url)
+
+
+class Orders(AdminOnlyMixin,ListView):
+    """Orders.
+    TODO: Show a list of all orders
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'
+
+
+class PendingOrders(AdminOnlyMixin,ListView):
+    """Pending Orders.
+    TODO: Show a list of orders in pending state
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'    
+
+    def get_queryset(self):       
+        return super().get_queryset().filter(state = 'PD')
+      
+      
+class ReadyOrders(StaffOnlyMixin, ListView):
+    """Ready Orders.
+    TODO: Show a list of orders in ready state
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'
+    
+    def get_queryset(self):
+       return super().get_queryset().filter(state = 'LT')
+
+      
+class OnWayOrders(StaffOnlyMixin,ListView):
+    """On Way Orders.
+    TODO: Show a list of orders in on way state
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'
+    
+    def get_queryset(self):
+        queryset =  super().get_queryset().filter(state = 'EC')
+        if self.request.user.is_delivery_man:
+            queryset = queryset.filter(delivery_man=self.request.user)
+        return queryset
+
+      
+class DeliveredOrders(StaffOnlyMixin,ListView):
+    """Delivered Orders.
+    TODO: Show a list of orders in delivered state
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'
+    
+    def get_queryset(self):
+        queryset =  super().get_queryset().filter(state = 'ET')
+        if self.request.user.is_delivery_man:
+            queryset = queryset.filter(delivery_man=self.request.user)
+        return queryset
