@@ -195,14 +195,38 @@ class Orders(AdminOnlyMixin,ListView):
     template_name = 'restaurante/order_list.html'
 
 
-class OnWayOrders(StaffOnlyMixin,ListView):
-    """Orders.
-    TODO: Show a list of all orders
+class PendingOrders(AdminOnlyMixin,ListView):
+    """Pending Orders.
+    TODO: Show a list of orders in pending state
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'    
+
+    def get_queryset(self):       
+        return super().get_queryset().filter(state = 'PD')
+      
+      
+class ReadyOrders(StaffOnlyMixin, ListView):
+    """Ready Orders.
+    TODO: Show a list of orders in ready state
     """
     login_url = 'users:login'
     model = Order
     template_name = 'restaurante/order_list.html'
+    
+    def get_queryset(self):
+       return super().get_queryset().filter(state = 'LT')
 
+      
+class OnWayOrders(StaffOnlyMixin,ListView):
+    """On Way Orders.
+    TODO: Show a list of orders in on way state
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'
+    
     def get_queryset(self):
         queryset =  super().get_queryset().filter(state = 'EC')
         if self.request.user.is_delivery_man:

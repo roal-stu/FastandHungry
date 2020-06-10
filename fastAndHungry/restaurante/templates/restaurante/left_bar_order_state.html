@@ -2,9 +2,9 @@
             <ul class="navbar-nav ml-auto my-2 my-lg-0">
                 {% if user.is_admin %}
                 <li ><a class="nav-link js-scroll-trigger" href="{% url 'users:home' %}">Todas</a></li>
-                <li><a class="nav-link js-scroll-trigger" href="{% url 'users:home' %}">Pendientes</a></li>
+                <li><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:orders_pending' %}">Pendientes</a></li>
                 {% endif %}
-                <li><a class="nav-link js-scroll-trigger" href="{% url 'users:home' %}">Litas</a></li>
+                <li><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:ready_orders' %}">Litas</a></li>
                 <li><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:orders_on_way' %}">En Camino</a></li>
                 {% if user.is_admin %}
                 <li><a class="nav-link js-scroll-trigger" href="{% url 'users:home' %}">Entregadas</a></li>
