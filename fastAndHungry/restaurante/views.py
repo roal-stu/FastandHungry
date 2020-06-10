@@ -187,8 +187,6 @@ class DeleteFromCart(LoginRequiredMixin,DeleteView):
 
 
 
-
-
 class MakeAnOrder(LoginRequiredMixin,UpdateView):
     """Make an order.
     TODO: Allows confirm the order that is in the cart
@@ -214,6 +212,19 @@ class MarkOrderReady(OnlyAdminMixin,View):
     def get(self, request, *args, **kwargs):
         order = Order.objects.get(id = self.kwargs.get('pk'))
         order.state = 'LT'
+        order.save()
+        return redirect(self.success_url)
+      
+class MarkOrderOnWay(DeliveryManOnlyMixin,View):
+    """Mark order on way.
+    TODO: Allow mark an order as on way
+    """
+    login_url = 'users:login'
+    success_url = reverse_lazy('restaurante:index')
+
+    def get(self, request, *args, **kwargs):
+        order = Order.objects.get(id = self.kwargs.get('pk'))
+        order.state = 'EC'
         order.save()
         return redirect(self.success_url)
 

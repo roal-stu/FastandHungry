@@ -31,8 +31,8 @@ urlpatterns = [
 
 	path('make-an-order/<int:pk>/', views.MakeAnOrder.as_view(), name='make_an_order'),
   	path('mark-order-ready/<int:pk>', views.MarkOrderReady.as_view(), name='mark_order_ready'),
+	path('mark-order-on-way/<int:pk>', views.MarkOrderOnWay.as_view(), name='mark_order_on_way'),
 
-	
 	path('orders-admin/', views.Orders.as_view(), name='orders_admin'),	
 	path('orders-admin/pd/', views.PendingOrders.as_view(), name='orders_pending'),
   	path('orders-admin/lt/', views.ReadyOrders.as_view(), name='orders_ready'),
