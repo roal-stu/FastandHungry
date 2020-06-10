@@ -9,3 +9,17 @@ class AdminOnlyMixin(LoginRequiredMixin,UserPassesTestMixin):
     """
     def test_func(self):
         return self.request.user.is_admin
+
+class DeliveryManOnlyMixin(LoginRequiredMixin,UserPassesTestMixin):
+    """Admin Only.
+    TODO: Verify that an admin user has accessed
+    """
+    def test_func(self):
+        return self.request.user.is_delivery_man
+
+class StaffOnlyMixin(LoginRequiredMixin,UserPassesTestMixin):
+    """Admin Only.
+    TODO: Verify that an admin user has accessed
+    """
+    def test_func(self):
+        return self.request.user.is_admin or self.request.user.is_delivery_man
