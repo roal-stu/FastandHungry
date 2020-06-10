@@ -28,6 +28,7 @@ urlpatterns = [
 	path('cart/', views.CartView.as_view(), name='cart'),
 	path('delete-cart-element/<int:pk>/', views.DeleteFromCart.as_view(), name='element_cart_delete'),
 	
+	path('mark-order-on-way/<int:pk>', views.MarkOrderOnWay.as_view(), name='mark_order_on_way'),
 ] 
 
 if settings.DEBUG:

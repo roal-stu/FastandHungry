@@ -184,3 +184,17 @@ class DeleteFromCart(LoginRequiredMixin,DeleteView):
 
     def get(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
+
+
+class MarkOrderReady(DeliveryManOnlyMixin,View):
+    """Mark order on way.
+    TODO: Allow mark an order as on way
+    """
+    login_url = 'users:login'
+    success_url = reverse_lazy('restaurante:index')
+
+    def get(self, request, *args, **kwargs):
+        order = Order.objects.get(id = self.kwargs.get('pk'))
+        order.state = 'EC'
+        order.save()
+        return redirect(self.success_url)
