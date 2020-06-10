@@ -74,6 +74,11 @@ class Order(models.Model):
         else:
             element.quantity += quantity
         element.save()
+
+    def is_empty(self):
+        if self.order_elems:
+            return False
+        return True
            
     def __str__(self):
         """Get str representation."""

@@ -20,11 +20,21 @@
 				{% for order in object_list %}
 
 				<tr>
+					<a href = "{% url 'restaurante:order' order.id %}" class="area-link"></a> 
 					<td>{{order.state}}</td>
 					<td>{{order.customer.username}}</td>
-					<td>{{order.admin.name}}</td>
-					<td> {{order.delivery_man.name}}</td>
-                    <td><a class="btn btn-sm btn-danger" href="{% url 'users:home' %}">Delete</a></td>
+					<td>{{order.admin.username}}</td>
+					<td> {{order.delivery_man.username}}</td>
+					{% if order.state == 'PD' %}
+						<td><a class="btn btn-sm btn-info" {% if user.is_admin %} href="{% url 'restaurante:mark_order_ready' order.id %}" {% endif %}>Lista</a></td>
+					{% elif order.state == 'LT' %}
+						<td><a class="btn btn-sm btn-info" {% if user.is_delivery_man %} href="{% url 'restaurante:mark_order_on_way' order.id %}"{% endif %}>Llevar</a></td>
+					{% elif order.state == 'EC' %}
+						<td><a class="btn btn-sm btn-info" {% if user.is_delivery_man %} href="{% url 'restaurante:mark_order_delivered' order.id %}"{% endif %}>Entregada</a></td>
+					{% else %}
+						<td><a class="btn btn-sm btn-info">No actions</a></td>
+					{% endif %}
+
 				</tr>
 				{% endfor %}
 

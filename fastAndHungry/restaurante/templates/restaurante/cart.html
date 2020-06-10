@@ -29,6 +29,12 @@
 
 			</table>
 		</div>
+		<div class="col-lg-7 col-lg-12 col-md-6 mt-5 text-center">                 
+			<a class="btn btn-warning btn-xl" href="{% url 'restaurante:menu'%}">Regresar</a>
+			{% if flag_cart %}
+			<a class="btn btn-success btn-xl" href="{% url 'restaurante:make_an_order' cart_id %}">Hacer pedido</a>
+			{% endif %}
+		 </div>
 	</div>
 </section>
 {% endblock body_content %}

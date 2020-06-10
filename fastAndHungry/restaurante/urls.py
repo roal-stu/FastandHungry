@@ -28,12 +28,12 @@ urlpatterns = [
 	path('cart/', views.CartView.as_view(), name='cart'),
 	path('delete-cart-element/<int:pk>/', views.DeleteFromCart.as_view(), name='element_cart_delete'),
 
-	path('order/<int:pk>/' views.OrderView.as_view(), name='order'),
+	path('order/<int:pk>/', views.OrderView.as_view(), name='order'),
 	
 	path('make-an-order/<int:pk>/', views.MakeAnOrder.as_view(), name='make_an_order'),
-  	path('mark-order-ready/<int:pk>', views.MarkOrderReady.as_view(), name='mark_order_ready'),
-	path('mark-order-on-way/<int:pk>', views.MarkOrderOnWay.as_view(), name='mark_order_on_way'),
-  	path('mark-order-delivered/<int:pk>', views.MarkOrderDelivered.as_view(), name='mark_order_delivered'),
+  	path('mark-order-ready/<int:pk>/', views.MarkOrderReady.as_view(), name='mark_order_ready'),
+	path('mark-order-on-way/<int:pk>/', views.MarkOrderOnWay.as_view(), name='mark_order_on_way'),
+  	path('mark-order-delivered/<int:pk>/', views.MarkOrderDelivered.as_view(), name='mark_order_delivered'),
 
 	path('orders-admin/', views.Orders.as_view(), name='orders_admin'),	
 	path('orders-admin/pd/', views.PendingOrders.as_view(), name='orders_pending'),

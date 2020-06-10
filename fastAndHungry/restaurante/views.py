@@ -5,14 +5,15 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.detail import DetailView
 
 from django.views import View
 
 # Create your views here.
 from .models import *
+from users.models import *
 from .mixins import *
 from .forms import *
-
 
 
 class Index(View):
@@ -147,6 +148,14 @@ class CartView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(CartView, self).get_context_data(*args, **kwargs)
+        cart, is_new_cart  = Order.objects.get_or_create(customer = self.request.user, state = 'CT')
+        
+        context['flag_cart'] = False
+        context['cart_id'] = 0 
+
+        if not is_new_cart and not cart.is_empty():
+            context['flag_cart'] = True
+            context['cart_id'] = cart.id 
         return context
 
 
@@ -191,7 +200,7 @@ class OrderView(StaffOnlyMixin,DetailView):
     TODO: Show the order information
     """
     login_url = 'users:login'
-    model = User
+    model = Order
     
     
 class MakeAnOrder(LoginRequiredMixin,UpdateView):
@@ -215,11 +224,12 @@ class MarkOrderReady(AdminOnlyMixin,View):
     TODO: Allow mark an order as ready
     """
     login_url = 'users:login'
-    success_url = reverse_lazy('restaurante:index')
+    success_url = reverse_lazy('restaurante:orders_ready')
 
     def get(self, request, *args, **kwargs):
         order = Order.objects.get(id = self.kwargs.get('pk'))
         order.state = 'LT'
+        order.admin = self.request.user
         order.save()
         return redirect(self.success_url)
 
@@ -229,11 +239,12 @@ class MarkOrderOnWay(DeliveryManOnlyMixin,View):
     TODO: Allow mark an order as on way
     """
     login_url = 'users:login'
-    success_url = reverse_lazy('restaurante:index')
+    success_url = reverse_lazy('restaurante:orders_on_way')
 
     def get(self, request, *args, **kwargs):
         order = Order.objects.get(id = self.kwargs.get('pk'))
         order.state = 'EC'
+        order.delivery_man = self.request.user
         order.save()
         return redirect(self.success_url)
 
@@ -243,7 +254,7 @@ class MarkOrderDelivered(DeliveryManOnlyMixin,View):
     TODO: Allow mark an order as delivered
     """
     login_url = 'users:login'
-    success_url = reverse_lazy('restaurante:index')
+    success_url = reverse_lazy('restaurante:orders_on_way')
 
     def get(self, request, *args, **kwargs):
         order = Order.objects.get(id = self.kwargs.get('pk'))
@@ -300,7 +311,7 @@ class OnWayOrders(StaffOnlyMixin,ListView):
         return queryset
 
       
-class DeliveredOrders(StaffOnlyMixin,ListView):
+class DeliveredOrders(AdminOnlyMixin,ListView):
     """Delivered Orders.
     TODO: Show a list of orders in delivered state
     """
