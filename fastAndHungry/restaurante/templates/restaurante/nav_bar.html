@@ -9,6 +9,9 @@
                 {% if user.is_admin %}
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'users:home_admin' %}">Admin</a></li>
                 {% endif %}
+                {% if user.is_delivery_man %}
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'users:home_admin' %}">Repartidor</a></li>
+                {% endif %}
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:menu' %}">Menu</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:cart' %}">Carrito</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'users:profile' %}">Perfil</a></li>
