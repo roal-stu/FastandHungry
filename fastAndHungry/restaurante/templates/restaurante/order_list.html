@@ -21,12 +21,10 @@
 
 				<tr>
 					<td>{{order.state}}</td>
-					<td>$ {{order.customer.name}}</td>
+					<td>{{order.customer.username}}</td>
 					<td>{{order.admin.name}}</td>
 					<td> {{order.delivery_man.name}}</td>
-                    <td><a class="btn btn-sm btn-danger" href="{% url 'restaurante:element_cart_delete' element.id %}">Delete</a></td>
-                    <td><a class="btn btn-sm btn-danger" href="{% url 'restaurante:element_cart_delete' element.id %}">Delete</a></td>
-                    <td><a class="btn btn-sm btn-danger" href="{% url 'restaurante:element_cart_delete' element.id %}">Delete</a></td>
+                    <td><a class="btn btn-sm btn-danger" href="{% url 'users:home' %}">Delete</a></td>
 				</tr>
 				{% endfor %}
 

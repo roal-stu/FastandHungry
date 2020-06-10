@@ -142,7 +142,7 @@ class CartView(LoginRequiredMixin, ListView):
     login_url = 'users:login'
 
     def get_queryset(self):
-        cart, is_new_cart  = Order.objects.get_or_create(user = self.request.user, state = 'CT')
+        cart, is_new_cart  = Order.objects.get_or_create(customer = self.request.user, state = 'CT')
         return super().get_queryset().filter(order = cart)
 
     def get_context_data(self, *args, **kwargs):
