@@ -29,7 +29,7 @@ urlpatterns = [
 	path('delete-cart-element/<int:pk>/', views.DeleteFromCart.as_view(), name='element_cart_delete'),
 
 	path('orders-admin/', views.Orders.as_view(), name='orders_admin'),
-	
+	path('orders-admin/ec/', views.OnWayOrders.as_view(), name='orders_on_way'),
 ] 
 
 if settings.DEBUG:
