@@ -192,3 +192,14 @@ class Orders(AdminOnlyMixin,ListView):
     login_url = 'users:login'
     model = Order
     template_name = 'restaurante/order_list.html'
+
+class PendingOrders(AdminOnlyMixin,ListView):
+    """Pending Orders.
+    TODO: Show a list of orders in pending state
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(state = 'PD')
