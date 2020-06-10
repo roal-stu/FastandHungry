@@ -160,7 +160,7 @@ class AddToCart(LoginRequiredMixin, View):
     def post(self,request,*args,**kwargs):
         """Receive and validate add to cart form."""
         form = AddToCartForm(request.POST)
-        cart, is_new_cart  = Order.objects.get_or_create(user = request.user, state = 'CT')
+        cart, is_new_cart  = Order.objects.get_or_create(customer = request.user, state = 'CT')
 
         element = Element.objects.get(id = self.kwargs.get('pk'))
         context = {}
@@ -184,3 +184,11 @@ class DeleteFromCart(LoginRequiredMixin,DeleteView):
 
     def get(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
+
+class Orders(AdminOnlyMixin,ListView):
+    """Orders.
+    TODO: Show a list of all orders
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'

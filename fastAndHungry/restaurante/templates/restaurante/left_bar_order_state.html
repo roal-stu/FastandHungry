@@ -1,0 +1,13 @@
+        <div class = 'container'>
+            <ul class="navbar-nav ml-auto my-2 my-lg-0">
+                {% if user.is_admin %}
+                <li ><a class="nav-link js-scroll-trigger" href="{% url 'users:home_admin' %}">Todas</a></li>
+                <li><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:menu' %}">Pendientes</a></li>
+                {% endif %}
+                <li><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:cart' %}">Litas</a></li>
+                <li><a class="nav-link js-scroll-trigger" href="{% url 'users:profile' %}">En Camino</a></li>
+                {% if user.is_admin %}
+                <li><a class="nav-link js-scroll-trigger" href="{% url 'users:logout' %}">Entregadas</a></li>
+                {% endif %}
+            </ul>
+        </div>

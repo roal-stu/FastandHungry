@@ -62,7 +62,9 @@ class Order(models.Model):
     ]
 
     state = models.CharField(choices=ORDER_STATES,max_length=2)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    admin = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='approved_orders',null=True)
+    delivery_man = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='delivered_orders',null=True)
     address = models.ForeignKey(Address,null=True,on_delete=models.SET_NULL)
 
     def add_element(self, new_element, quantity):
@@ -75,7 +77,7 @@ class Order(models.Model):
            
     def __str__(self):
         """Get str representation."""
-        return 'Orden de %s. %s' % (self.user.username, self.state)
+        return 'Orden de %s. %s' % (self.customer.username, self.state)
 
     def __repr__(self):
        """Get str representation."""
