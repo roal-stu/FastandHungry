@@ -1,0 +1,11 @@
+{% extends 'restaurante/base.html' %}
+{% load static %}
+
+{% block body_content %}
+<!-- Masthead-->
+<section class="page-section bg-dark text-white">
+    <h1>{{ order}}</h1>
+    <p>Dirección: {{ order.address }}</p>
+
+</section>
+{% endblock body_content %}

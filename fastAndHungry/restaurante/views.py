@@ -184,3 +184,11 @@ class DeleteFromCart(LoginRequiredMixin,DeleteView):
 
     def get(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
+
+
+class OrderView(StaffOnlyMixin,DetailView):
+    """Order.
+    TODO: Show the order information
+    """
+    login_url = 'users:login'
+    model = User
