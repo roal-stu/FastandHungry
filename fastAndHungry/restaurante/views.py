@@ -208,8 +208,9 @@ class MakeAnOrder(LoginRequiredMixin,UpdateView):
         self.object.state = 'LT'
         self.object.save()
         return super().post(request, *args, **kwargs)
-      
-class MarkOrderReady(OnlyAdminMixin,View):
+
+
+class MarkOrderReady(AdminOnlyMixin,View):
     """Mark order ready.
     TODO: Allow mark an order as ready
     """
@@ -221,7 +222,8 @@ class MarkOrderReady(OnlyAdminMixin,View):
         order.state = 'LT'
         order.save()
         return redirect(self.success_url)
-      
+
+
 class MarkOrderOnWay(DeliveryManOnlyMixin,View):
     """Mark order on way.
     TODO: Allow mark an order as on way
@@ -234,8 +236,9 @@ class MarkOrderOnWay(DeliveryManOnlyMixin,View):
         order.state = 'EC'
         order.save()
         return redirect(self.success_url)
-      
- class MarkOrderDelivered(OnlyDeliveryManMixin,View):
+
+
+class MarkOrderDelivered(DeliveryManOnlyMixin,View):
     """Mark order delivered.
     TODO: Allow mark an order as delivered
     """
@@ -247,6 +250,7 @@ class MarkOrderOnWay(DeliveryManOnlyMixin,View):
         order.state = 'ET'
         order.save()
         return redirect(self.success_url)
+
 
 class Orders(AdminOnlyMixin,ListView):
     """Orders.
@@ -303,7 +307,6 @@ class DeliveredOrders(StaffOnlyMixin,ListView):
     login_url = 'users:login'
     model = Order
     template_name = 'restaurante/order_list.html'
-    
     
     def get_queryset(self):
         queryset =  super().get_queryset().filter(state = 'ET')
