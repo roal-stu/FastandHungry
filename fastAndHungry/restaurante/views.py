@@ -184,3 +184,20 @@ class DeleteFromCart(LoginRequiredMixin,DeleteView):
 
     def get(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
+
+
+class MakeAnOrder(LoginRequiredMixin,UpdateView):
+    """Make an order.
+    TODO: Allows confirm the order that is in the cart
+    """
+    login_url = 'users:login'
+    model = Order
+    fields = ['address']
+    success_url = reverse_lazy('users:home')
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.state = 'LT'
+        self.object.save()
+        return super().post(request, *args, **kwargs)
+
