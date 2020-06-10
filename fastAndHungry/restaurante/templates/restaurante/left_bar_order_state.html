@@ -7,7 +7,7 @@
                 <li><a class="nav-link js-scroll-trigger" href="{% url 'users:home' %}">Litas</a></li>
                 <li><a class="nav-link js-scroll-trigger" href="{% url 'users:home' %}">En Camino</a></li>
                 {% if user.is_admin %}
-                <li><a class="nav-link js-scroll-trigger" href="{% url 'users:home' %}">Entregadas</a></li>
+                <li><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:orders_delivered' %}">Entregadas</a></li>
                 {% endif %}
             </ul>
         </div>
