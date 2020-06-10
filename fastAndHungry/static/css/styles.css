@@ -9997,6 +9997,12 @@ html {
   height: 100%;
 }
 
+hr.long-divider {
+  max-width: 90%;
+  border-width: 0.2rem;
+  border-color: #f4623a;
+}
+
 hr.divider {
   max-width: 3.25rem;
   border-width: 0.2rem;

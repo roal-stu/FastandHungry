@@ -76,9 +76,13 @@ class Order(models.Model):
         element.save()
 
     def is_empty(self):
-        if self.order_elems:
-            return False
-        return True
+        return self.order_elems.count() == 0
+
+    def get_total(self):
+        total = 0
+        for elem in self.order_elems.all():
+            total += elem.get_subtotal()
+        return total
            
     def __str__(self):
         """Get str representation."""

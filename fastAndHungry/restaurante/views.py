@@ -144,18 +144,16 @@ class CartView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         cart, is_new_cart  = Order.objects.get_or_create(customer = self.request.user, state = 'CT')
-        return super().get_queryset().filter(order = cart)
+        return cart.order_elems.all()
 
     def get_context_data(self, *args, **kwargs):
         context = super(CartView, self).get_context_data(*args, **kwargs)
         cart, is_new_cart  = Order.objects.get_or_create(customer = self.request.user, state = 'CT')
         
-        context['flag_cart'] = False
-        context['cart_id'] = 0 
+        context['flag_cart'] = not cart.is_empty()
+        context['cart_id'] = cart.id
+        context['cart_total'] = cart.get_total()
 
-        if not is_new_cart and not cart.is_empty():
-            context['flag_cart'] = True
-            context['cart_id'] = cart.id 
         return context
 
 
@@ -212,12 +210,17 @@ class MakeAnOrder(LoginRequiredMixin,UpdateView):
     fields = ['address']
     success_url = reverse_lazy('users:home')
 
+    def get(self, request, *args, **kwargs):
+        object = self.get_object()
+        if object.is_empty():
+            return redirect( reverse_lazy( 'restaurante:cart'))
+        return super().get(self, request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.state = 'LT'
         self.object.save()
         return super().post(request, *args, **kwargs)
-
 
 class MarkOrderReady(AdminOnlyMixin,View):
     """Mark order ready.
