@@ -142,7 +142,7 @@ class CartView(LoginRequiredMixin, ListView):
     login_url = 'users:login'
 
     def get_queryset(self):
-        cart, is_new_cart  = Order.objects.get_or_create(user = self.request.user, state = 'CT')
+        cart, is_new_cart  = Order.objects.get_or_create(customer = self.request.user, state = 'CT')
         return super().get_queryset().filter(order = cart)
 
     def get_context_data(self, *args, **kwargs):
@@ -160,7 +160,7 @@ class AddToCart(LoginRequiredMixin, View):
     def post(self,request,*args,**kwargs):
         """Receive and validate add to cart form."""
         form = AddToCartForm(request.POST)
-        cart, is_new_cart  = Order.objects.get_or_create(user = request.user, state = 'CT')
+        cart, is_new_cart  = Order.objects.get_or_create(customer = request.user, state = 'CT')
 
         element = Element.objects.get(id = self.kwargs.get('pk'))
         context = {}
@@ -201,3 +201,65 @@ class MakeAnOrder(LoginRequiredMixin,UpdateView):
         self.object.save()
         return super().post(request, *args, **kwargs)
 
+class Orders(AdminOnlyMixin,ListView):
+    """Orders.
+    TODO: Show a list of all orders
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'
+
+
+class PendingOrders(AdminOnlyMixin,ListView):
+    """Pending Orders.
+    TODO: Show a list of orders in pending state
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'    
+
+    def get_queryset(self):       
+        return super().get_queryset().filter(state = 'PD')
+      
+      
+class ReadyOrders(StaffOnlyMixin, ListView):
+    """Ready Orders.
+    TODO: Show a list of orders in ready state
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'
+    
+    def get_queryset(self):
+       return super().get_queryset().filter(state = 'LT')
+
+      
+class OnWayOrders(StaffOnlyMixin,ListView):
+    """On Way Orders.
+    TODO: Show a list of orders in on way state
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'
+    
+    def get_queryset(self):
+        queryset =  super().get_queryset().filter(state = 'EC')
+        if self.request.user.is_delivery_man:
+            queryset = queryset.filter(delivery_man=self.request.user)
+        return queryset
+
+      
+class DeliveredOrders(StaffOnlyMixin,ListView):
+    """Delivered Orders.
+    TODO: Show a list of orders in delivered state
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'
+    
+    
+    def get_queryset(self):
+        queryset =  super().get_queryset().filter(state = 'ET')
+        if self.request.user.is_delivery_man:
+            queryset = queryset.filter(delivery_man=self.request.user)
+        return queryset

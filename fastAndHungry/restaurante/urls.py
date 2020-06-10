@@ -30,6 +30,12 @@ urlpatterns = [
 
 	path('make-an-order/<int:pk>/', views.MakeAnOrder.as_view(), name='make_an_order'),
 	
+	path('orders-admin/', views.Orders.as_view(), name='orders_admin'),	
+	path('orders-admin/pd/', views.PendingOrders.as_view(), name='orders_pending'),
+  	path('orders-admin/lt/', views.ReadyOrders.as_view(), name='orders_ready'),
+  	path('orders-admin/ec/', views.OnWayOrders.as_view(), name='orders_on_way'),
+ 	path('orders-admin/et/', views.DeliveredOrders.as_view(), name='orders_delivered'),
+  
 ] 
 
 if settings.DEBUG:
