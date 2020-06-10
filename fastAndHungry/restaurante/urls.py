@@ -28,9 +28,10 @@ urlpatterns = [
 	path('cart/', views.CartView.as_view(), name='cart'),
 	path('delete-cart-element/<int:pk>/', views.DeleteFromCart.as_view(), name='element_cart_delete'),
 
-	path('orders-admin/', views.Orders.as_view(), name='orders_admin'),
+	path('orders-admin/', views.Orders.as_view(), name='orders_admin'),	
 	path('orders-admin/pd', views.PendingOrders.as_view(), name='orders_pending'),
   path('orders-admin/lt/', views.ReadyOrders.as_view(), name='ready_orders'),
+  path('orders-admin/ec/', views.OnWayOrders.as_view(), name='orders_on_way'),
 	
 ] 
 
