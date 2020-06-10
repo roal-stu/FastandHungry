@@ -186,6 +186,14 @@ class DeleteFromCart(LoginRequiredMixin,DeleteView):
         return super().delete(request, *args, **kwargs)
 
 
+class OrderView(StaffOnlyMixin,DetailView):
+    """Order.
+    TODO: Show the order information
+    """
+    login_url = 'users:login'
+    model = User
+    
+    
 class MakeAnOrder(LoginRequiredMixin,UpdateView):
     """Make an order.
     TODO: Allows confirm the order that is in the cart
