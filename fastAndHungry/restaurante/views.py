@@ -185,6 +185,7 @@ class DeleteFromCart(LoginRequiredMixin,DeleteView):
     def get(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
 
+
 class Orders(AdminOnlyMixin,ListView):
     """Orders.
     TODO: Show a list of all orders
@@ -193,6 +194,19 @@ class Orders(AdminOnlyMixin,ListView):
     model = Order
     template_name = 'restaurante/order_list.html'
 
+
+class PendingOrders(AdminOnlyMixin,ListView):
+    """Pending Orders.
+    TODO: Show a list of orders in pending state
+    """
+    login_url = 'users:login'
+    model = Order
+    template_name = 'restaurante/order_list.html'
+
+    def get_queryset(self):       
+        return super().get_queryset().filter(state = 'PD')
+      
+      
 class ReadyOrders(StaffOnlyMixin, ListView):
     """Ready Orders.
     TODO: Show a list of ready orders
@@ -200,6 +214,6 @@ class ReadyOrders(StaffOnlyMixin, ListView):
     login_url = 'users:login'
     model = Order
     template_name = 'restaurante/order_list.html'
-
+    
     def get_queryset(self):
-        return super().get_queryset().filter(state = 'LT')
+       return super().get_queryset().filter(state = 'LT')
