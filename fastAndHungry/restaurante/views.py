@@ -218,7 +218,7 @@ class MakeAnOrder(LoginRequiredMixin,UpdateView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.object.state = 'LT'
+        self.object.state = 'PD'
         self.object.save()
         return super().post(request, *args, **kwargs)
 
@@ -227,7 +227,7 @@ class MarkOrderReady(AdminOnlyMixin,View):
     TODO: Allow mark an order as ready
     """
     login_url = 'users:login'
-    success_url = reverse_lazy('restaurante:orders_ready')
+    success_url = reverse_lazy('restaurante:orders_pending')
 
     def get(self, request, *args, **kwargs):
         order = Order.objects.get(id = self.kwargs.get('pk'))
@@ -242,7 +242,7 @@ class MarkOrderOnWay(DeliveryManOnlyMixin,View):
     TODO: Allow mark an order as on way
     """
     login_url = 'users:login'
-    success_url = reverse_lazy('restaurante:orders_on_way')
+    success_url = reverse_lazy('restaurante:orders_ready')
 
     def get(self, request, *args, **kwargs):
         order = Order.objects.get(id = self.kwargs.get('pk'))
@@ -327,7 +327,7 @@ class OnWayOrders(StaffOnlyMixin,ListView):
     
     def get_queryset(self):
         queryset =  super().get_queryset().filter(state = 'EC')
-        if self.request.user.is_delivery_man:
+        if self.request.user.is_delivery_man and not self.request.user.is_admin:
             queryset = queryset.filter(delivery_man=self.request.user)
         return queryset
 
