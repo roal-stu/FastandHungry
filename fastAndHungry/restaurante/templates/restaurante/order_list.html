@@ -4,11 +4,16 @@
 {% block body_content %}
 <!-- Masthead-->
 <section class="page-section bg-dark text-white">
-    {% include 'restaurante/left_bar_order_state.html' %}	
-    <div class="row">
-	<div class="col-md">
+	<div class="container-nm container">
+		
+		<h2 class="text-center mt-0">{{ title }}</h2>
+        <hr class="divider my-4" />
+		
+		<div class="row">
+	
+			{% include 'restaurante/left_bar_order_state.html' %}	
 
-		<div class="card card-body bg-info">
+			<div class="card-body bg-dark-obs col-lg-9">
 			<table class="table table-dark">
 				<tr>
 					<th>Estado</th>
@@ -20,11 +25,11 @@
 				{% for order in object_list %}
 
 				<tr>
-					<a href = "{% url 'restaurante:order' order.id %}" class="area-link"></a> 
-					<td>{{order.state}}</td>
+					<td>{{order.get_state_display}}</td>
 					<td>{{order.customer.username}}</td>
 					<td>{{order.admin.username}}</td>
 					<td> {{order.delivery_man.username}}</td>
+
 					{% if order.state == 'PD' %}
 						<td><a class="btn btn-sm btn-info" {% if user.is_admin %} href="{% url 'restaurante:mark_order_ready' order.id %}" {% endif %}>Lista</a></td>
 					{% elif order.state == 'LT' %}
@@ -32,13 +37,16 @@
 					{% elif order.state == 'EC' %}
 						<td><a class="btn btn-sm btn-info" {% if user.is_delivery_man %} href="{% url 'restaurante:mark_order_delivered' order.id %}"{% endif %}>Entregada</a></td>
 					{% else %}
-						<td><a class="btn btn-sm btn-info">No actions</a></td>
+						<td><a class="btn btn-sm btn-info">Sin acción</a></td>
 					{% endif %}
+						<td><a  class="btn btn-sm btn-info" href = "{% url 'restaurante:order' order.id %}">Ver</a> </td>
 
 				</tr>
 				{% endfor %}
 
 			</table>
+			</div>
+
 		</div>
 	</div>
 </section>

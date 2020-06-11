@@ -271,6 +271,14 @@ class Orders(AdminOnlyMixin,ListView):
     model = Order
     template_name = 'restaurante/order_list.html'
 
+    def get_queryset(self):       
+        return super().get_queryset().exclude(state = 'CT')
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(Orders, self).get_context_data(*args, **kwargs)
+        context['title'] = 'Todas las ordenes'
+        return context
+
 
 class PendingOrders(AdminOnlyMixin,ListView):
     """Pending Orders.
@@ -282,6 +290,11 @@ class PendingOrders(AdminOnlyMixin,ListView):
 
     def get_queryset(self):       
         return super().get_queryset().filter(state = 'PD')
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PendingOrders, self).get_context_data(*args, **kwargs)
+        context['title'] = 'Ordenes Pendientes'
+        return context
       
       
 class ReadyOrders(StaffOnlyMixin, ListView):
@@ -294,6 +307,11 @@ class ReadyOrders(StaffOnlyMixin, ListView):
     
     def get_queryset(self):
        return super().get_queryset().filter(state = 'LT')
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ReadyOrders, self).get_context_data(*args, **kwargs)
+        context['title'] = 'Ordenes Listas'
+        return context
 
       
 class OnWayOrders(StaffOnlyMixin,ListView):
@@ -310,6 +328,11 @@ class OnWayOrders(StaffOnlyMixin,ListView):
             queryset = queryset.filter(delivery_man=self.request.user)
         return queryset
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(OnWayOrders, self).get_context_data(*args, **kwargs)
+        context['title'] = 'Ordenes En Camino'
+        return context
+
       
 class DeliveredOrders(AdminOnlyMixin,ListView):
     """Delivered Orders.
@@ -324,3 +347,8 @@ class DeliveredOrders(AdminOnlyMixin,ListView):
         if self.request.user.is_delivery_man:
             queryset = queryset.filter(delivery_man=self.request.user)
         return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(DeliveredOrders, self).get_context_data(*args, **kwargs)
+        context['title'] = 'Ordenes Entregadas'
+        return context

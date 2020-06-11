@@ -54,11 +54,11 @@ class Order(models.Model):
     TODO: represents an order.
     """
     ORDER_STATES = [
-        ('CT','CARRITO'),
-        ('PD','PENDIENTE'),
-        ('LT','LISTA'),
-        ('EC','EN CAMINO'),
-        ('ET','ENTREGADO'),
+        ('CT','Carrito'),
+        ('PD','Pendiente'),
+        ('LT','Lista'),
+        ('EC','En Camino'),
+        ('ET','Entregado'),
     ]
 
     state = models.CharField(choices=ORDER_STATES,max_length=2)
