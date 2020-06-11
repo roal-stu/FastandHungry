@@ -1,6 +1,7 @@
 from django.db import models
 
 from users.models import *
+from .validators import *
 
 # Create your models here.
 
@@ -63,9 +64,9 @@ class Order(models.Model):
 
     state = models.CharField(choices=ORDER_STATES,max_length=2)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
-    admin = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='approved_orders',null=True)
-    delivery_man = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='delivered_orders',null=True)
-    address = models.ForeignKey(Address,null=True,on_delete=models.SET_NULL)
+    admin = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='approved_orders',null=True,validators=[IsAdminValidator()] )
+    delivery_man = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='delivered_orders',null=True, validators=[IsDeliveryManValidator()])
+    address = models.ForeignKey(Address,null=True,on_delete=models.SET_NULL,validators=[IsUserAddress(customer,'cliente')])
 
     def add_element(self, new_element, quantity):
         element, is_new = self.order_elems.get_or_create(element = new_element)
