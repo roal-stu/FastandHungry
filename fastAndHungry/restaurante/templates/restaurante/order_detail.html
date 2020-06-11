@@ -4,8 +4,76 @@
 {% block body_content %}
 <!-- Masthead-->
 <section class="page-section bg-dark text-white">
-    <h1>{{ order}}</h1>
-    <p>Dirección: {{ order.address }}</p>
+    <div class="container">
+
+        <h2 class="text-center mt-0">Detalles de la orden</h2>
+        <hr class="divider my-4" />
+
+        <div class='row'>
+
+        <div class="col-lg-3 mr-5">
+            <table class="table table-dark">
+
+                <tr>
+                    <th>Dirección:</th>
+                    <th></th>
+				</tr>
+                
+                <tr>
+					<td>Calle</td>
+					<td>{{ order.address.calle }}</td>
+                </tr>
+                
+                <tr>
+					<td>Numero</td>
+					<td>{{ order.address.exterior }}</td>
+                </tr>
+                
+                {% if order.address.interior %}
+                <tr>
+					<td>Interior</td>
+					<td>{{ order.address.interior }}</td>
+                </tr>
+                {% endif %}
+
+                <tr>
+					<td>Colonia</td>
+					<td>{{ order.address.colonia }}</td>
+                </tr>
+                
+                <tr>
+					<td>Delegación</td>
+					<td>{{ order.address.delegacion }}</td>
+                </tr>
+                
+                <tr>
+					<td>C.P.</td>
+					<td>{{ order.address.codigo_postal }}</td>
+                </tr>
+
+			</table>
+        </div>
+
+        <div class="card card-body bg-info col-lg-8 ml-4">
+			<table class="table table-dark">
+				<tr>
+					<th>Platillo</th>
+                    <th>Catidad</th>
+				</tr>
+
+				{% for element in order.order_elems_all %}
+
+				<tr>
+					<td>{{element.element.name}}</td>
+					<td>{{element.quantity}}</td>
+					
+				</tr>
+				{% endfor %}
+
+			</table>
+        </div>
+        
+        </div>
 
 </section>
 {% endblock body_content %}
