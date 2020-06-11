@@ -1,13 +1,18 @@
-        <div class = 'container'>
-            <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                {% if user.is_admin %}
-                <li ><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:orders_admin' %}">Todas</a></li>
-                <li><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:orders_pending' %}">Pendientes</a></li>
-                {% endif %}
-                <li><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:orders_ready' %}">Litas</a></li>
-                <li><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:orders_on_way' %}">En Camino</a></li>
-                {% if user.is_admin %}
-                <li><a class="nav-link js-scroll-trigger" href="{% url 'restaurante:orders_delivered' %}">Entregadas</a></li>
-                    {% endif %}
-            </ul>
-        </div>
+
+<nav class = "bg-dark col-lg-2" id="latBar">
+    <div class="container">
+    
+    <ul class="mt-5 mb-5">
+        <td><a class="latbar-brand">Filtros</a></td>
+        {% if user.is_admin %}
+        <td><a class="latbar-link js-scroll-trigger" href="{% url 'restaurante:orders_admin' %}">Todas</a></td>
+        <td><a class="latbar-link js-scroll-trigger" href="{% url 'restaurante:orders_pending' %}">Pendientes</a></td>
+        {% endif %}
+        <td><a class="latbar-link js-scroll-trigger" href="{% url 'restaurante:orders_ready' %}">Litas</a></td>
+        <td><a class="latbar-link js-scroll-trigger" href="{% url 'restaurante:orders_on_way' %}">Camino</a></td>
+        {% if user.is_admin %}
+        <td><a class="latbar-link js-scroll-trigger" href="{% url 'restaurante:orders_delivered' %}">Entregadas</a></td>
+        {% endif %}
+    </ul>
+    </div>
+</nav>
