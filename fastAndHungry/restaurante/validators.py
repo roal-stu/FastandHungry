@@ -10,10 +10,11 @@ from users.models import *
 class IsDeliveryManValidator(object):
 
     def __call__ (self, value):
-        if not value.is_delivery_man:
+        user = User.objects.get(id=value)
+        if not user.is_delivery_man:
             raise ValidationError(
                 _('%(value)s no es un repartidor'),
-                params={'value': value},
+                params={'value': user},
             )
 
 
@@ -21,10 +22,11 @@ class IsDeliveryManValidator(object):
 class IsAdminValidator(object):
 
     def __call__ (self, value):
-        if not value.is_admin:
+        user = User.objects.get(id=value)
+        if not user.is_admin:
             raise ValidationError(
                 _('%(value)s no es un administrador'),
-                params={'value': value},
+                params={'value': user},
             )
 
 
@@ -36,9 +38,10 @@ class IsUserAddress(object):
         self.role = role
 
     def __call__ (self, value):
-        user = value.usuario
+        address = Address.objects.get(id=value)
+        user = address.usuario
         if not user == self.user:
             raise ValidationError(
-                _('La dirección no es dirección del %(role)s'),
+                _('La dirección no pertenece al %(role)s'),
                 params={ 'role': self.role },
             )
