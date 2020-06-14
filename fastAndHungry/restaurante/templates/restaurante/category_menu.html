@@ -12,7 +12,7 @@
         <div class="container-cards">
             {% for element in object_list %}
             
-            <div class="col-lg-3 col-md-6 card-elem">
+            <div class="col-lg-3 col-md-6 card-elem bg-dark-obs">
                 
                 <img {% if element.image %} src= "{{element.image.url}}" {% else %} src= "" {% endif %} >
                 <h3 class="h4 mb-2 mt-2 text-primary">{{ element.name }}</h3>

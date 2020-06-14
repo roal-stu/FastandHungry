@@ -13,7 +13,7 @@
         <div class="container-cards">
             {% for cat in object_list %}
             
-            <div class="col-lg-3 col-md-6 card-elem">
+            <div class="col-lg-3 col-md-6 card-elem bg-dark-obs">
                 <a href = "{% url 'restaurante:category' cat.id %}" class="area-link"></a> 
                 <img {% if cat.image %} src= "{{cat.image.url}}" {% else %} src= "" {% endif %} >
                 <h3 class="h4 mb-2 mt-2 text-primary">{{ cat.name }}</h3>

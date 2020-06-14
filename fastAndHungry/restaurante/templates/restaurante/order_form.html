@@ -14,11 +14,14 @@
 
     				{% for field in form %}
     				<div class="addDireccion">
-       					{{ field.errors }}
         				{{ field.label_tag }}
-        				{{ field }}
-   					</div>
- 					{% endfor %}
+						{{ field }}
+						{{ field.errors }}
+   					
+					 {% endfor %}
+					
+						<a class="btn btn-sm btn-primary" href="{% url 'users:address_create' %}">+ Dirección</a>
+					</div>
 					   
 					 <div class="d-flex justify-content-center mt-3 login_container">
 				 		<input class="btn btn-success btn-xl" type="submit" value="Agregar">
