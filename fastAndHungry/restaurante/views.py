@@ -48,7 +48,7 @@ class CategoryView(LoginRequiredMixin,ListView):
 
     def get_context_data(self, *args, **kwargs):
         form = AddToCartForm()
-        context = super(CategoryView, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         context['category_name'] = Category.objects.get(id = self.kwargs.get('pk'))
         context['form'] = form
         return context
@@ -147,7 +147,7 @@ class CartView(LoginRequiredMixin, ListView):
         return cart.order_elems.all()
 
     def get_context_data(self, *args, **kwargs):
-        context = super(CartView, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         cart, is_new_cart  = Order.objects.get_or_create(customer = self.request.user, state = 'CT')
         
         context['flag_cart'] = not cart.is_empty()
@@ -211,7 +211,7 @@ class MakeAnOrder(LoginRequiredMixin,UpdateView):
     form_class = MakeAnOrderForm
 
     def get_form_kwargs(self):
-        kwargs = super(MakeAnOrder,self).get_form_kwargs()
+        kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
     
@@ -221,11 +221,11 @@ class MakeAnOrder(LoginRequiredMixin,UpdateView):
             return redirect( reverse_lazy( 'restaurante:cart'))
         return super().get(self, request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.object.state = 'PD'
-        self.object.save()
-        return super().post(request, *args, **kwargs)
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.state = 'PD'
+        obj.save()  
+        return super().form_valid(form)
 
 class MarkOrderReady(AdminOnlyMixin,View):
     """Mark order ready.
@@ -283,7 +283,7 @@ class Orders(AdminOnlyMixin,ListView):
         return super().get_queryset().exclude(state = 'CT')
 
     def get_context_data(self, *args, **kwargs):
-        context = super(Orders, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         context['title'] = 'Todas las ordenes'
         return context
 
@@ -300,7 +300,7 @@ class PendingOrders(AdminOnlyMixin,ListView):
         return super().get_queryset().filter(state = 'PD')
 
     def get_context_data(self, *args, **kwargs):
-        context = super(PendingOrders, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         context['title'] = 'Ordenes Pendientes'
         return context
       
@@ -317,7 +317,7 @@ class ReadyOrders(StaffOnlyMixin, ListView):
        return super().get_queryset().filter(state = 'LT')
 
     def get_context_data(self, *args, **kwargs):
-        context = super(ReadyOrders, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         context['title'] = 'Ordenes Listas'
         return context
 
@@ -337,7 +337,7 @@ class OnWayOrders(StaffOnlyMixin,ListView):
         return queryset
 
     def get_context_data(self, *args, **kwargs):
-        context = super(OnWayOrders, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         context['title'] = 'Ordenes En Camino'
         return context
 
@@ -357,6 +357,6 @@ class DeliveredOrders(AdminOnlyMixin,ListView):
         return queryset
 
     def get_context_data(self, *args, **kwargs):
-        context = super(DeliveredOrders, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         context['title'] = 'Ordenes Entregadas'
         return context

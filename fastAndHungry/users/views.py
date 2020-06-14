@@ -204,7 +204,7 @@ class DeliveryManCreate(AdminOnlyMixin, CreateView):
         return super().form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
-        context = super(DeliveryManCreate, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         context['is_dm_create'] = True
         return context
 

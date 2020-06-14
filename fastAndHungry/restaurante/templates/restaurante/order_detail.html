@@ -61,7 +61,7 @@
                     <th>Catidad</th>
 				</tr>
 
-				{% for element in order.order_elems_all %}
+				{% for element in order.order_elems.all %}
 
 				<tr>
 					<td>{{element.element.name}}</td>

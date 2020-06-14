@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.utils.translation import gettext_lazy as _
+
 from users.models import *
 from .validators import *
 
@@ -64,9 +66,20 @@ class Order(models.Model):
 
     state = models.CharField(choices=ORDER_STATES,max_length=2)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
-    admin = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='approved_orders',null=True,validators=[IsAdminValidator()] )
-    delivery_man = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='delivered_orders',null=True, validators=[IsDeliveryManValidator()])
-    address = models.ForeignKey(Address,null=True,on_delete=models.SET_NULL,validators=[IsUserAddress(customer,'cliente')])
+    admin = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='approved_orders',null=True,blank=True,validators=[IsAdminValidator()] )
+    delivery_man = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='delivered_orders',null=True,blank=True,validators=[IsDeliveryManValidator()])
+    address = models.ForeignKey(Address,null=True,on_delete=models.SET_NULL)
+
+    def full_clean(self, exclude=None, validate_unique=True):
+        super().full_clean(exclude, validate_unique)
+        if self.address:
+            if not self.address in self.customer.addresses.all():
+                raise ValidationError(
+                    _('La dirección no pertenece al cliente. Usuario esperado: %(user)s, Usuario recibido: %(ad_user)s'),
+                    params={ 'user' : self.customer , 'ad_user' : self.address.usuario},
+            )
+
+
 
     def add_element(self, new_element, quantity):
         element, is_new = self.order_elems.get_or_create(element = new_element)

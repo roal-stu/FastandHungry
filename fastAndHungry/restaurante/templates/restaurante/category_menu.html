@@ -17,7 +17,7 @@
                 <img {% if element.image %} src= "{{element.image.url}}"{% else %} src= "" {% endif %}  >
                 <h3 class="h4 mb-2 mt-2 text-primary font-weight-bold text-uppercase ">{{ element.name }}</h3>
                 <p class = "font-italic text-info">{{ element.description }}</p>
-                <p class="badge badge-success text-wrap text-monospace "> $ {{ element.price }} pesos</p></p>
+                <p class="badge badge-primary text-wrap text-monospace "> $ {{ element.price }} pesos</p></p>
 
                 <form action="{% url 'restaurante:add_to_cart' element.id %}" method="POST">
                     {% csrf_token %}
@@ -44,4 +44,20 @@
     
     </div>
 </section>
+
+
+<script>
+    /* Because i didnt set a width iuse vainilla javascript
+     * We start indexing at one because CSRF_token is considered and input field 
+     */
+
+    //Query All input fields
+    var form_fields = document.getElementsByTagName('input')
+    var fields_num = form_fields.length
+
+    for (var i = 1; i < fields_num; i++){	
+        form_fields[i].style = 'width : 30%'
+    }
+</script>
+
 {% endblock body_content %}

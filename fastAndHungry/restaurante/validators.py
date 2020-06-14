@@ -42,6 +42,6 @@ class IsUserAddress(object):
         user = address.usuario
         if not user == self.user:
             raise ValidationError(
-                _('La dirección no pertenece al %(role)s'),
-                params={ 'role': self.role },
+                _('La dirección no pertenece al %(role)s. Usuario esperado: %(user)s, Usuario recibido: %(ad_user)s'),
+                params={ 'role': self.role , 'user' : self.user , 'ad_user' : user},
             )
