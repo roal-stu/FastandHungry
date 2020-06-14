@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.detail import DetailView
 
 from django.views import View
@@ -207,9 +207,14 @@ class MakeAnOrder(LoginRequiredMixin,UpdateView):
     """
     login_url = 'users:login'
     model = Order
-    fields = ['address']
     success_url = reverse_lazy('users:home')
+    form_class = MakeAnOrderForm
 
+    def get_form_kwargs(self):
+        kwargs = super(MakeAnOrder,self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+    
     def get(self, request, *args, **kwargs):
         object = self.get_object()
         if object.is_empty():
