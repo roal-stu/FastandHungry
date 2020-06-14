@@ -9,14 +9,15 @@
         <h2 class="text-center mt-0">{{ category_name }}</h2>
         <hr class="divider my-4" />
 
-        <div class="container-cards">
+        <div class="container-cards ">
             {% for element in object_list %}
             
             <div class="col-lg-3 col-md-6 card-elem bg-dark-obs">
-                
-                <img {% if element.image %} src= "{{element.image.url}}" {% else %} src= "" {% endif %} >
-                <h3 class="h4 mb-2 mt-2 text-primary">{{ element.name }}</h3>
-                <p>{{ element.description }}</p><p></p>${{ element.price }}</p>
+          
+                <img {% if element.image %} src= "{{element.image.url}}"{% else %} src= "" {% endif %}  >
+                <h3 class="h4 mb-2 mt-2 text-primary font-weight-bold text-uppercase ">{{ element.name }}</h3>
+                <p class = "font-italic text-info">{{ element.description }}</p>
+                <p class="badge badge-success text-wrap text-monospace "> $ {{ element.price }} pesos</p></p>
 
                 <form action="{% url 'restaurante:add_to_cart' element.id %}" method="POST">
                     {% csrf_token %}
@@ -28,7 +29,12 @@
                         {{ field }}
                         
  					{% endfor %}
-                    <input class="btn btn-sm btn-info" type="submit" value="Agregar al cart">
+                    <!-- <input class="btn btn-sm btn-info" type="submit" value="Agregar al carrito"> -->
+                    <br>  </br> 
+                    <button type="submit" class="btn btn-success">
+
+                        <i class="fa fa-cart-plus"></i> Agregar a carrito
+                    </button>
                 </form>
         
             </div>

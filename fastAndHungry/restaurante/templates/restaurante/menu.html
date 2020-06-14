@@ -14,11 +14,13 @@
             {% for cat in object_list %}
             
             <div class="col-lg-3 col-md-6 card-elem bg-dark-obs">
+
+                <hr class="divider my-4" />
                 <a href = "{% url 'restaurante:category' cat.id %}" class="area-link"></a> 
                 <img {% if cat.image %} src= "{{cat.image.url}}" {% else %} src= "" {% endif %} >
-                <h3 class="h4 mb-2 mt-2 text-primary">{{ cat.name }}</h3>
-                <p>{{ cat.description }}</p>
-
+                <h3 class=" h4 mb-2 mt-2 text-primary font-weight-bold text-uppercase text-monospace">{{ cat.name }}</h3>
+                <p class=" text-monospace ">{{ cat.description }}</p>
+                 <hr class="divider my-4" />    
             </div>
 
             {% endfor %}
