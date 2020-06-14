@@ -5,12 +5,15 @@ from .models import*
 #Create your forms here.
 
 class AddToCartForm(forms.Form):
-    quantity = forms.IntegerField(min_value=1)
+    quantity = forms.IntegerField(min_value=1,label='Cantidad')
 
 class MakeAnOrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['address']
+        labels = {
+            'address' : 'Dirección'
+        }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)

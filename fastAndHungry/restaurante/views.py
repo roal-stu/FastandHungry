@@ -79,6 +79,9 @@ class ElementCreate(AdminOnlyMixin, CreateView):
     login_url = 'users:login'
     model = Element
     fields = '__all__'
+    labels = {
+        'name' : 'Nombre'
+    }
     title = 'Crear Platillo'
     success_url = reverse_lazy('restaurante:elements_admin')
 

@@ -17,9 +17,9 @@ class Category(models.Model):
     """Category Model.
     TODO: represents a category
     """
-    name = models.CharField(max_length=200)
-    description = models.CharField(max_length=280)
-    image = models.ImageField(upload_to=element_image_directory_path, null=True, blank=True)
+    name = models.CharField(max_length=200, verbose_name='nombre')
+    description = models.CharField(max_length=280, verbose_name='descripción')
+    image = models.ImageField(upload_to=element_image_directory_path, null=True, blank=True, verbose_name='imagen')
 
     def __str__(self):
         """Get str representation."""
@@ -35,13 +35,13 @@ class Element(models.Model):
     TODO: represents a element.
     Each element must be related to a category
     """
-    name = models.CharField(max_length=200)
-    price = models.IntegerField()
-    description = models.CharField(max_length=280)
-    image = models.ImageField(upload_to=element_image_directory_path, null=True, blank=True)
+    name = models.CharField(max_length=200,verbose_name='nombre')
+    price = models.IntegerField(verbose_name='precio')
+    description = models.CharField(max_length=280,verbose_name='descripción')
+    image = models.ImageField(upload_to=element_image_directory_path, null=True, blank=True,verbose_name='imagen')
 
     #relatiionship
-    category = models.ForeignKey(Category,on_delete=models.CASCADE)
+    category = models.ForeignKey(Category,on_delete=models.CASCADE, verbose_name='categoria')
 
     def __str__(self):
         """Get str representation."""
@@ -64,11 +64,11 @@ class Order(models.Model):
         ('ET','Entregado'),
     ]
 
-    state = models.CharField(choices=ORDER_STATES,max_length=2)
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
-    admin = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='approved_orders',null=True,blank=True,validators=[IsAdminValidator()] )
-    delivery_man = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='delivered_orders',null=True,blank=True,validators=[IsDeliveryManValidator()])
-    address = models.ForeignKey(Address,null=True,on_delete=models.SET_NULL)
+    state = models.CharField(choices=ORDER_STATES,max_length=2,verbose_name='estado')
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders',verbose_name='cliente')
+    admin = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='approved_orders',null=True,blank=True,validators=[IsAdminValidator()])
+    delivery_man = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='delivered_orders',null=True,blank=True,validators=[IsDeliveryManValidator()],verbose_name='repartidor')
+    address = models.ForeignKey(Address,null=True,on_delete=models.SET_NULL,verbose_name='dirección')
 
     def full_clean(self, exclude=None, validate_unique=True):
         super().full_clean(exclude, validate_unique)
@@ -111,9 +111,9 @@ class OrderElement(models.Model):
     """Represents a element with a quantity.
     TODO: represents a element inside a order
     """
-    element = models.ForeignKey(Element,on_delete=models.CASCADE)
-    order = models.ForeignKey(Order,on_delete=models.CASCADE, related_name='order_elems')
-    quantity = models.IntegerField(default = 1)
+    element = models.ForeignKey(Element,on_delete=models.CASCADE,verbose_name='platillo')
+    order = models.ForeignKey(Order,on_delete=models.CASCADE, related_name='order_elems',verbose_name='pedido')
+    quantity = models.IntegerField(default = 1,verbose_name='cantidad')
 
     def get_subtotal(self):
         return self.quantity * self.element.price
